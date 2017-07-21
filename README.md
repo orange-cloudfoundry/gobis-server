@@ -21,24 +21,32 @@ NAME:
    gobis - Create a gobis server based on a config file
 
 USAGE:
-   gobis [global options] command [command options] [arguments...]
+   gobis-server [global options] command [command options] [arguments...]
 
 VERSION:
-   1.0.0
+   1.1.0
 
 COMMANDS:
      help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --config value, -c value     Path to the config file (default: "gobis-config.yml")
-   --log-level value, -l value  Log level to use (default: "info")
-   --log-json, -j               Write log in json
-   --no-color                   Logger will not display colors
-   --help, -h                   show help
-   --version, -v                print the version
+   --config-path value, -c value  Path to the config file (default: "gobis-config.yml")
+   --cert value                   Path to a cert file or a cert content to enable https server (default: "server.crt")
+   --key value                    Path to a key file or a key content to enable https server (default: "server.key")
+   --log-level value, -l value    Log level to use (default: "info")
+   --log-json, -j                 Write log in json
+   --no-color                     Logger will not display colors
+   --help, -h                     show help
+   --version, -v                  print the version
 ```
 
 ## Usage
+
+There is two different usage:
+1. [In local](#in-local)
+2. [In a cloud](#in-a-cloud) through [gautocloud](https://github.com/cloudfoundry-community/gautocloud) (Run with ease gobis on: Kubernetes, CloudFoundry or Heroku)
+
+### In local
 
 1. Create a `gobis-config.yml` file where you want to run your server, following this schema:
 
@@ -92,3 +100,45 @@ routes:
 ```
 
 2. Run `gobis` in your terminal and server is now started
+
+### In a cloud
+
+**Note**: If a gobis config file exists routes, protected headers, start path and host will be merged against the service configuration.
+  
+#### On CloudFoundry
+
+1. Create a cups service named `.*gobis-config` with the same credentials set in yaml, example:
+```json
+{
+  "protected_headers": ["x-header-one"],
+  "routes": [
+    {
+      "name": "app",
+      "path": "/**",
+      "url": "http://www.mocky.io/v2/595625d22900008702cd71e8",
+      "show_error": true,
+      "no_buffer": false
+    }
+  ]
+}
+```
+2. Bind it to your gobis instance
+
+#### On Heroku or Kubernetes
+
+1. Create an env var or service named `.*GOBIS_CONFIG` where you put your configuration in json, example:
+```json
+{
+  "protected_headers": ["x-header-one"],
+  "routes": [
+    {
+      "name": "app",
+      "path": "/**",
+      "url": "http://www.mocky.io/v2/595625d22900008702cd71e8",
+      "show_error": true,
+      "no_buffer": false
+    }
+  ]
+}
+```
+2. Your configuration should be loaded

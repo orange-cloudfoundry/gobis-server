@@ -13,28 +13,53 @@ import (
 	"github.com/orange-cloudfoundry/gobis-middlewares"
 	"github.com/orange-cloudfoundry/gobis-middlewares/casbin"
 	"github.com/orange-cloudfoundry/gobis"
+	"github.com/cloudfoundry-community/gautocloud"
+	"github.com/cloudfoundry-community/gautocloud/connectors/generic"
 )
+
+func init() {
+	gautocloud.RegisterConnector(generic.NewSchemaBasedGenericConnector(
+		"gobis-config",
+		".*gobis(_|-)config",
+		[]string{".*gobis(_|-)config"},
+		GobisServerConfig{},
+	))
+}
+
+type GobisServerConfig struct {
+	Host             string `json:"host" yaml:"host"`
+	Port             int `json:"port" yaml:"port"`
+	Routes           []gobis.ProxyRoute `json:"routes" yaml:"routes"`
+	StartPath        string `json:"start_path" yaml:"start_path"`
+	ProtectedHeaders []string `json:"protected_headers" yaml:"protected_headers"`
+	Cert             string
+	Key              string
+	LogLevel         string
+	LogJson          bool
+	NoColor          bool
+	ConfigPath       string
+}
 
 func main() {
 	app := cli.NewApp()
 	app.Name = "gobis"
-	app.Version = "1.0.0"
+	app.Version = "1.1.0"
 	app.Usage = "Create a gobis server based on a config file"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
-			Name:  "config, c",
+			Name:  "config-path, c",
 			Value: "gobis-config.yml",
 			Usage: "Path to the config file",
 		},
 		cli.StringFlag{
-			Name:  "cert-file, cert",
+			Name:  "cert",
 			Value: "server.crt",
-			Usage: "Path to a cert file to enable https server",
+			Usage: "Path to a cert file or a cert content to enable https server",
 		},
 		cli.StringFlag{
-			Name:  "key-file, key",
+			Name:  "key",
 			Value: "server.key",
-			Usage: "Path to a cert file to enable https server",
+			Usage: "Path to a key file or a key content to enable https server",
 		},
 		cli.StringFlag{
 			Name:  "log-level, l",
@@ -53,22 +78,35 @@ func main() {
 	app.Action = runServer
 	app.Run(os.Args)
 }
-func loadLogConfig(c *cli.Context) {
-	noColor := c.GlobalBool("no-color")
-	logJson := c.GlobalBool("log-json")
-	if logJson {
+func loadServerConfig(c *cli.Context) GobisServerConfig {
+	var config GobisServerConfig
+	err := gautocloud.Inject(&config)
+	if err == nil {
+		log.Info("Loading config from cloud environment")
+		return config
+	}
+	config.Routes = make([]gobis.ProxyRoute, 0)
+	config.NoColor = c.GlobalBool("no-color")
+	config.LogJson = c.GlobalBool("log-json")
+	config.LogLevel = c.GlobalString("log-level")
+	config.Cert = c.GlobalString("cert")
+	config.Key = c.GlobalString("key")
+	config.ConfigPath = c.GlobalString("config-path")
+	return config
+}
+func loadLogConfig(c GobisServerConfig) {
+	if c.LogJson {
 		log.SetFormatter(&log.JSONFormatter{})
 	} else {
 		log.SetFormatter(&log.TextFormatter{
-			DisableColors: noColor,
+			DisableColors: c.NoColor,
 		})
 	}
 
-	logLevel := c.GlobalString("log-level")
-	if logLevel == "" {
+	if c.LogLevel == "" {
 		return
 	}
-	switch strings.ToUpper(logLevel) {
+	switch strings.ToUpper(c.LogLevel) {
 	case "ERROR":
 		log.SetLevel(log.ErrorLevel)
 		return
@@ -89,16 +127,29 @@ func loadLogConfig(c *cli.Context) {
 	return
 }
 func runServer(c *cli.Context) error {
-	loadLogConfig(c)
-	certPath := c.GlobalString("cert-file")
-	keyPath := c.GlobalString("key-file")
-	configPath := c.GlobalString("config")
-	conf, err := loadConfig(configPath)
-	if err != nil {
-		return err
+	config := loadServerConfig(c)
+	loadLogConfig(config)
+	if config.Port == 0 {
+		port, _ := strconv.Atoi(os.Getenv("PORT"))
+		config.Port = port
+	}
+	if gautocloud.IsInACloudEnv() {
+		if _, ok := gautocloud.GetAppInfo().Properties["port"]; ok {
+			config.Port = gautocloud.GetAppInfo().Properties["port"].(int)
+		}
+	}
+	mergeFileGobisConfig(&config)
+	if len(config.Routes) == 0 {
+		return fmt.Errorf("You must configure routes in your config file")
 	}
 	gobisHandler, err := gobis.NewDefaultHandlerWithRouterFactory(
-		conf,
+		gobis.DefaultHandlerConfig{
+			ProtectedHeaders: config.ProtectedHeaders,
+			StartPath: config.StartPath,
+			Host: config.Host,
+			Routes: config.Routes,
+			Port: config.Port,
+		},
 		gobis.NewRouterFactory(
 			middlewares.Cors,
 			middlewares.Ldap,
@@ -116,6 +167,14 @@ func runServer(c *cli.Context) error {
 		return err
 	}
 	servAddr := gobisHandler.GetServerAddr()
+	certPath, err := getTlsFilePath(config.Cert)
+	if err != nil {
+		return err
+	}
+	keyPath, err := getTlsFilePath(config.Key)
+	if err != nil {
+		return err
+	}
 	log.Infof("Serving gobis server in https on address '%s'", servAddr)
 	err = http.ListenAndServeTLS(servAddr, certPath, keyPath, gobisHandler)
 	if err != nil {
@@ -126,22 +185,46 @@ func runServer(c *cli.Context) error {
 	log.Infof("Serving an insecure gobis server in http on address '%s'", servAddr)
 	return http.ListenAndServe(servAddr, gobisHandler)
 }
-func loadConfig(path string) (gobis.DefaultHandlerConfig, error) {
-	dat, err := ioutil.ReadFile(path)
+func getTlsFilePath(tlsConf string) (string, error) {
+	if tlsConf == "" {
+		return "", nil
+	}
+	_, err := os.Stat(tlsConf)
+	if err == nil {
+		return tlsConf, nil
+	}
+	if !os.IsNotExist(err) {
+		return "", err
+	}
+	f, err := ioutil.TempFile("", "gobis")
 	if err != nil {
-		return gobis.DefaultHandlerConfig{}, err
+		return "", err
 	}
-	conf := gobis.DefaultHandlerConfig{}
-	err = yaml.Unmarshal(dat, &conf)
+	defer f.Close()
+	f.WriteString(tlsConf)
+	return f.Name(), nil
+}
+func mergeFileGobisConfig(c *GobisServerConfig) {
+	dat, err := ioutil.ReadFile(c.ConfigPath)
 	if err != nil {
-		return gobis.DefaultHandlerConfig{}, err
+		return
 	}
-	if conf.Port == 0 {
-		port, _ := strconv.Atoi(os.Getenv("PORT"))
-		conf.Port = port
+	confFile := gobis.DefaultHandlerConfig{}
+	err = yaml.Unmarshal(dat, &confFile)
+	if err != nil {
+		log.Warnf("Could not unmarshal config file found: %s", err.Error())
+		return
 	}
-	if len(conf.Routes) == 0 {
-		return conf, fmt.Errorf("You must configure routes in your config file")
+	if confFile.Port != 0 && !gautocloud.IsInACloudEnv() {
+		c.Port = confFile.Port
 	}
-	return conf, nil
+	if confFile.Host != "" {
+		c.Host = confFile.Host
+	}
+	if confFile.StartPath != "" {
+		c.StartPath = confFile.StartPath
+	}
+	c.ProtectedHeaders = append(c.ProtectedHeaders, confFile.ProtectedHeaders...)
+	c.Routes = append(c.Routes, confFile.Routes...)
+	return
 }
