@@ -142,7 +142,7 @@ func runServer(c *cli.Context) error {
 	if len(config.Routes) == 0 {
 		return fmt.Errorf("You must configure routes in your config file")
 	}
-	gobisHandler, err := gobis.NewDefaultHandlerWithRouterFactory(
+	gobisHandler, err := gobis.NewDefaultHandler(
 		gobis.DefaultHandlerConfig{
 			ProtectedHeaders: config.ProtectedHeaders,
 			StartPath: config.StartPath,
@@ -151,16 +151,16 @@ func runServer(c *cli.Context) error {
 			Port: config.Port,
 		},
 		gobis.NewRouterFactory(
-			middlewares.Cors,
-			middlewares.Ldap,
-			middlewares.BasicAuth,
-			middlewares.Basic2Token,
-			middlewares.Jwt,
-			casbin.Casbin,
-			middlewares.CircuitBreaker,
-			middlewares.RateLimit,
-			middlewares.ConnLimit,
-			middlewares.Trace,
+			middlewares.NewCors(),
+			middlewares.NewLdap(),
+			middlewares.NewBasicAuth(),
+			middlewares.NewBasic2Token(),
+			middlewares.NewJwt(),
+			casbin.NewCasbin(),
+			middlewares.NewCircuitBreaker(),
+			middlewares.NewRateLimit(),
+			middlewares.NewConnLimit(),
+			middlewares.NewTrace(),
 		),
 	)
 	if err != nil {
