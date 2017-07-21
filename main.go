@@ -27,6 +27,16 @@ func main() {
 			Usage: "Path to the config file",
 		},
 		cli.StringFlag{
+			Name:  "cert-file, cert",
+			Value: "server.crt",
+			Usage: "Path to a cert file to enable https server",
+		},
+		cli.StringFlag{
+			Name:  "key-file, key",
+			Value: "server.key",
+			Usage: "Path to a cert file to enable https server",
+		},
+		cli.StringFlag{
 			Name:  "log-level, l",
 			Value: "info",
 			Usage: "Log level to use",
@@ -80,6 +90,8 @@ func loadLogConfig(c *cli.Context) {
 }
 func runServer(c *cli.Context) error {
 	loadLogConfig(c)
+	certPath := c.GlobalString("cert-file")
+	keyPath := c.GlobalString("key-file")
 	configPath := c.GlobalString("config")
 	conf, err := loadConfig(configPath)
 	if err != nil {
@@ -104,7 +116,14 @@ func runServer(c *cli.Context) error {
 		return err
 	}
 	servAddr := gobisHandler.GetServerAddr()
-	log.Infof("Serving gobis server on address '%s'", servAddr)
+	log.Infof("Serving gobis server in https on address '%s'", servAddr)
+	err = http.ListenAndServeTLS(servAddr, certPath, keyPath, gobisHandler)
+	if err != nil {
+		log.Warn("Server wasn't start with tls, maybe you didn't set a cert and key file.")
+		log.Warn("For security reasons you should use tls.")
+		log.Warnf("Errors given: %s", err.Error())
+	}
+	log.Infof("Serving an insecure gobis server in http on address '%s'", servAddr)
 	return http.ListenAndServe(servAddr, gobisHandler)
 }
 func loadConfig(path string) (gobis.DefaultHandlerConfig, error) {

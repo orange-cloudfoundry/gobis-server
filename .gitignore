@@ -1,2 +1,4 @@
 /gobis-server
 /gobis-config.yml
+/vendor
+/manifest.yml
