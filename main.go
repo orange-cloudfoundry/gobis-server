@@ -14,6 +14,7 @@ import (
 	"github.com/orange-cloudfoundry/gobis"
 	"github.com/cloudfoundry-community/gautocloud"
 	"github.com/cloudfoundry-community/gautocloud/connectors/generic"
+	"net/url"
 )
 
 func init() {
@@ -37,12 +38,13 @@ type GobisServerConfig struct {
 	LogJson          bool
 	NoColor          bool
 	ConfigPath       string
+	ForwardUrl       string
 }
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "gobis"
-	app.Version = "1.1.0"
+	app.Name = "gobis-server"
+	app.Version = "1.1.1"
 	app.Usage = "Create a gobis server based on a config file"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
@@ -64,6 +66,10 @@ func main() {
 			Name:  "log-level, l",
 			Value: "info",
 			Usage: "Log level to use",
+		},
+		cli.StringFlag{
+			Name:  "forward-url, f",
+			Usage: "If set all non-found url by gobis will be forwarded to this url",
 		},
 		cli.BoolFlag{
 			Name:  "log-json, j",
@@ -91,6 +97,7 @@ func loadServerConfig(c *cli.Context) GobisServerConfig {
 	config.Cert = c.GlobalString("cert")
 	config.Key = c.GlobalString("key")
 	config.ConfigPath = c.GlobalString("config-path")
+	config.ForwardUrl = c.GlobalString("forward-url")
 	return config
 }
 func loadLogConfig(c GobisServerConfig) {
@@ -141,6 +148,10 @@ func runServer(c *cli.Context) error {
 	if len(config.Routes) == 0 {
 		return fmt.Errorf("You must configure routes in your config file")
 	}
+	forwardedUrl, err := url.Parse(config.ForwardUrl)
+	if err != nil {
+		return fmt.Errorf("Cannot parse forward url: " + err.Error())
+	}
 	gobisHandler, err := gobis.NewDefaultHandler(
 		gobis.DefaultHandlerConfig{
 			ProtectedHeaders: config.ProtectedHeaders,
@@ -148,6 +159,7 @@ func runServer(c *cli.Context) error {
 			Host: config.Host,
 			Routes: config.Routes,
 			Port: config.Port,
+			ForwardedUrl: forwardedUrl,
 		},
 		gobis.NewRouterFactory(middlewares.DefaultHandlers()...),
 	)

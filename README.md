@@ -18,13 +18,13 @@ If you set your `PATH` with `$GOPATH/bin/` you should have now a `gobis-server` 
 
 ```
 NAME:
-   gobis - Create a gobis server based on a config file
+   gobis-server - Create a gobis server based on a config file
 
 USAGE:
-   gobis-server [global options] command [command options] [arguments...]
+   gobis-server [global options]
 
 VERSION:
-   1.1.0
+   1.1.1
 
 COMMANDS:
      help, h  Shows a list of commands or help for one command
@@ -34,6 +34,7 @@ GLOBAL OPTIONS:
    --cert value                   Path to a cert file or a cert content to enable https server (default: "server.crt")
    --key value                    Path to a key file or a key content to enable https server (default: "server.key")
    --log-level value, -l value    Log level to use (default: "info")
+   --forward-url value, -f value  If set all non-found url by gobis will be forwarded to this url
    --log-json, -j                 Write log in json
    --no-color                     Logger will not display colors
    --help, -h                     show help
