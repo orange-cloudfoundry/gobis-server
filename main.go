@@ -11,7 +11,6 @@ import (
 	"strings"
 	"strconv"
 	"github.com/orange-cloudfoundry/gobis-middlewares"
-	"github.com/orange-cloudfoundry/gobis-middlewares/casbin"
 	"github.com/orange-cloudfoundry/gobis"
 	"github.com/cloudfoundry-community/gautocloud"
 	"github.com/cloudfoundry-community/gautocloud/connectors/generic"
@@ -150,18 +149,7 @@ func runServer(c *cli.Context) error {
 			Routes: config.Routes,
 			Port: config.Port,
 		},
-		gobis.NewRouterFactory(
-			middlewares.NewCors(),
-			middlewares.NewLdap(),
-			middlewares.NewBasicAuth(),
-			middlewares.NewBasic2Token(),
-			middlewares.NewJwt(),
-			casbin.NewCasbin(),
-			middlewares.NewCircuitBreaker(),
-			middlewares.NewRateLimit(),
-			middlewares.NewConnLimit(),
-			middlewares.NewTrace(),
-		),
+		gobis.NewRouterFactory(middlewares.DefaultHandlers()...),
 	)
 	if err != nil {
 		return err
