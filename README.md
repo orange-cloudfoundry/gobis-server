@@ -106,7 +106,7 @@ routes:
 
 **Note**: If a gobis config file exists routes, protected headers, start path and host will be merged against the service configuration.
   
-#### On CloudFoundry
+#### On CloudFoundry as an a
 
 1. Create a cups service named `.*gobis-config` with the same credentials set in yaml, example:
 ```json
@@ -124,6 +124,34 @@ routes:
 }
 ```
 2. Bind it to your gobis instance
+
+----
+
+You can either create a configuration to make your app be used as a route service, this how to to do this.
+
+Your configuration should use `forwarded_header` set to `X-CF-Forwarded-Url`.
+
+Url can be omitted but if you set it to the cloud foundry route where you want to redirect it will possible to create multiple gobis routes for different cloud foundry app.
+ 
+Example of configuration:
+```json
+{
+  "protected_headers": ["x-header-one"],
+  "routes": [
+    {
+      "name": "my-cf-app",
+      "path": "/**",
+      "url": "http://my_cf_app_under_gobis.external.domain.cf",
+      "forwarded_header": "X-CF-Forwarded-Url",
+      "show_error": true,
+      "no_buffer": false
+    }
+  ]
+}
+```
+
+you can now create an user provided route service (`cf cups to-gobis -r https://gobis.external.domain.cf`) and bind it to 
+your app route which will be under gobis (`cf bind-route-service external.domain.cf to-gobis --hostname my_cf_app_under_gobis`)
 
 #### On Heroku or Kubernetes
 
