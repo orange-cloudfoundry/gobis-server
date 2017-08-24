@@ -1,13 +1,13 @@
 package cli
 
 import (
-	"github.com/urfave/cli"
 	"github.com/cloudfoundry-community/gautocloud"
 	"github.com/orange-cloudfoundry/gobis"
-	log "github.com/sirupsen/logrus"
-	"strings"
 	"github.com/orange-cloudfoundry/gobis-server/server"
+	log "github.com/sirupsen/logrus"
+	"github.com/urfave/cli"
 	"os"
+	"strings"
 )
 
 type GobisServerApp struct {

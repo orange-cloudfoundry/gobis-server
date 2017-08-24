@@ -1,17 +1,17 @@
 package server
 
 import (
-	"github.com/orange-cloudfoundry/gobis"
-	"io/ioutil"
-	"os"
-	"github.com/cloudfoundry-community/gautocloud"
-	"gopkg.in/yaml.v2"
-	log "github.com/sirupsen/logrus"
-	"strconv"
 	"fmt"
-	"net/url"
-	"net/http"
+	"github.com/cloudfoundry-community/gautocloud"
 	"github.com/cloudfoundry-community/gautocloud/connectors/generic"
+	"github.com/orange-cloudfoundry/gobis"
+	log "github.com/sirupsen/logrus"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"os"
+	"strconv"
 )
 
 func init() {
@@ -24,18 +24,18 @@ func init() {
 }
 
 type GobisServerConfig struct {
-	Host             string `json:"host" yaml:"host"`
-	Port             int `json:"port" yaml:"port"`
+	Host             string             `json:"host" yaml:"host"`
+	Port             int                `json:"port" yaml:"port"`
 	Routes           []gobis.ProxyRoute `json:"routes" yaml:"routes"`
-	StartPath        string `json:"start_path" yaml:"start_path"`
-	ProtectedHeaders []string `json:"protected_headers" yaml:"protected_headers"`
-	Cert             string `json:"cert" yaml:"cert" cloud-default:"server.crt"`
-	Key              string `json:"key" yaml:"key" cloud-default:"server.key"`
-	LogLevel         string `json:"log_level" yaml:"log_level" cloud-default:"info"`
-	LogJson          bool `json:"log_json" yaml:"log_json"`
-	NoColor          bool `json:"no_color" yaml:"no_color"`
-	ConfigPath       string `json:"config_path" yaml:"config_path" cloud-default:"gobis-config.yml"`
-	ForwardUrl       string `json:"forward_url" yaml:"forward_url"`
+	StartPath        string             `json:"start_path" yaml:"start_path"`
+	ProtectedHeaders []string           `json:"protected_headers" yaml:"protected_headers"`
+	Cert             string             `json:"cert" yaml:"cert" cloud-default:"server.crt"`
+	Key              string             `json:"key" yaml:"key" cloud-default:"server.key"`
+	LogLevel         string             `json:"log_level" yaml:"log_level" cloud-default:"info"`
+	LogJson          bool               `json:"log_json" yaml:"log_json"`
+	NoColor          bool               `json:"no_color" yaml:"no_color"`
+	ConfigPath       string             `json:"config_path" yaml:"config_path" cloud-default:"gobis-config.yml"`
+	ForwardUrl       string             `json:"forward_url" yaml:"forward_url"`
 }
 
 type GobisServer struct {
@@ -81,11 +81,11 @@ func (s *GobisServer) Load() error {
 	s.handler, err = gobis.NewDefaultHandler(
 		gobis.DefaultHandlerConfig{
 			ProtectedHeaders: s.config.ProtectedHeaders,
-			StartPath: s.config.StartPath,
-			Host: s.config.Host,
-			Routes: s.config.Routes,
-			Port: s.config.Port,
-			ForwardedUrl: forwardedUrl,
+			StartPath:        s.config.StartPath,
+			Host:             s.config.Host,
+			Routes:           s.config.Routes,
+			Port:             s.config.Port,
+			ForwardedUrl:     forwardedUrl,
 		},
 		gobis.NewRouterFactory(MiddlewareHandlers()...),
 	)

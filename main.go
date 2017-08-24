@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/orange-cloudfoundry/gobis-server/cli"
-	"os"
-	"github.com/orange-cloudfoundry/gobis-server/server"
 	"github.com/orange-cloudfoundry/gobis-middlewares"
+	"github.com/orange-cloudfoundry/gobis-server/cli"
+	"github.com/orange-cloudfoundry/gobis-server/server"
+	"os"
 )
 
 func init() {
