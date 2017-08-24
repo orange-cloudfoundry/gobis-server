@@ -6,6 +6,7 @@ import (
 	"github.com/cloudfoundry-community/gautocloud/connectors/generic"
 	"github.com/orange-cloudfoundry/gobis"
 	log "github.com/sirupsen/logrus"
+	"golang.org/x/crypto/acme/autocert"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"net/http"
@@ -24,18 +25,19 @@ func init() {
 }
 
 type GobisServerConfig struct {
-	Host             string             `json:"host" yaml:"host"`
-	Port             int                `json:"port" yaml:"port"`
-	Routes           []gobis.ProxyRoute `json:"routes" yaml:"routes"`
-	StartPath        string             `json:"start_path" yaml:"start_path"`
-	ProtectedHeaders []string           `json:"protected_headers" yaml:"protected_headers"`
-	Cert             string             `json:"cert" yaml:"cert" cloud-default:"server.crt"`
-	Key              string             `json:"key" yaml:"key" cloud-default:"server.key"`
-	LogLevel         string             `json:"log_level" yaml:"log_level" cloud-default:"info"`
-	LogJson          bool               `json:"log_json" yaml:"log_json"`
-	NoColor          bool               `json:"no_color" yaml:"no_color"`
-	ConfigPath       string             `json:"config_path" yaml:"config_path" cloud-default:"gobis-config.yml"`
-	ForwardUrl       string             `json:"forward_url" yaml:"forward_url"`
+	Host               string             `json:"host" yaml:"host"`
+	Port               int                `json:"port" yaml:"port"`
+	Routes             []gobis.ProxyRoute `json:"routes" yaml:"routes"`
+	StartPath          string             `json:"start_path" yaml:"start_path"`
+	ProtectedHeaders   []string           `json:"protected_headers" yaml:"protected_headers"`
+	Cert               string             `json:"cert" yaml:"cert" cloud-default:"server.crt"`
+	Key                string             `json:"key" yaml:"key" cloud-default:"server.key"`
+	LogLevel           string             `json:"log_level" yaml:"log_level" cloud-default:"info"`
+	LogJson            bool               `json:"log_json" yaml:"log_json"`
+	NoColor            bool               `json:"no_color" yaml:"no_color"`
+	ConfigPath         string             `json:"config_path" yaml:"config_path" cloud-default:"gobis-config.yml"`
+	ForwardUrl         string             `json:"forward_url" yaml:"forward_url"`
+	LetsEncryptDomains []string           `json:"lets_encrypt_domain" yaml:"lets_encrypt_domain"`
 }
 
 type GobisServer struct {
@@ -104,12 +106,17 @@ func (s *GobisServer) Load() error {
 }
 func (s GobisServer) Run() error {
 	servAddr := s.handler.GetServerAddr()
+	if s.config.LetsEncryptDomains != nil && len(s.config.LetsEncryptDomains) > 0 {
+		log.Info("Serving gobis server in https on ':443' with let's encrypt certificate (443 is mandatory by let's encrypt).")
+		return http.Serve(autocert.NewListener(s.config.LetsEncryptDomains...), s.handler)
+	}
 	log.Infof("Serving gobis server in https on address '%s'", servAddr)
 	err := http.ListenAndServeTLS(servAddr, s.config.Cert, s.config.Key, s.handler)
 	if err != nil {
 		log.Warn("Server wasn't start with tls, maybe you didn't set a cert and key file.")
 		log.Warn("For security reasons you should use tls.")
-		log.Warnf("Errors given: %s", err.Error())
+		log.Warn("You can use tls easily by setting lets encrypt over cli with --lets-encrypt=example.com,example2.com or through config with key 'lets_encrypt_domain'")
+		log.Warnf("Errors given: '%s'", err.Error())
 	}
 	log.Infof("Serving an insecure gobis server in http on address '%s'", servAddr)
 	return http.ListenAndServe(servAddr, s.handler)

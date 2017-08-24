@@ -53,6 +53,10 @@ func NewApp() *GobisServerApp {
 			Name:  "no-color",
 			Usage: "Logger will not display colors",
 		},
+		cli.StringFlag{
+			Name:  "lets-encrypt, le",
+			Usage: "If set server will use a certificate generated with let's encypt, value should be your domain(s) (e.g.: --lets-encrypt=example.com[,seconddomain.com]). Host and port will be overwritten to use 0.0.0.0:443",
+		},
 	}
 	app.Action = app.RunServer
 	return app
@@ -89,6 +93,11 @@ func (a GobisServerApp) loadServerConfig(c *cli.Context) *server.GobisServerConf
 	config.Key = c.GlobalString("key")
 	config.ConfigPath = c.GlobalString("config-path")
 	config.ForwardUrl = c.GlobalString("forward-url")
+	leDomains := c.GlobalString("lets-encrypt")
+	if leDomains != "" {
+		config.LetsEncryptDomains = strings.Split(leDomains, ",")
+	}
+
 	return config
 }
 func (a GobisServerApp) loadLogConfig(c *server.GobisServerConfig) {
