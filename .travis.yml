@@ -7,8 +7,8 @@ script: go test -v ./... -args -ginkgo.randomizeAllSpecs -ginkgo.trace
 after_success:
 - bin/build_all
 - docker build -t orangeopensource/gobis-server .
-- if [ "x$TRAVIS_TAG" == "x" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"; docker push orangeopensource/gobis-server:$( echo "$TRAVIS_TAG" | cut -c 2- ); fi
-- if [ "x$TRAVIS_TAG" == "x" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"; docker push orangeopensource/gobis-server; fi
+- if [ "x$TRAVIS_TAG" != "x" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"; docker push orangeopensource/gobis-server:$( echo "$TRAVIS_TAG" | cut -c 2- ); fi
+- if [ "x$TRAVIS_TAG" != "x" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"; docker push orangeopensource/gobis-server; fi
 deploy:
   provider: releases
   api_key:
