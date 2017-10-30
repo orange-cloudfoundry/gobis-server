@@ -1,4 +1,7 @@
 /gobis-server
-/*.yml
+/uaa*.yml
+/manifest.yml
+/gobis*.yml
 /*.json
+/out
 /vendor

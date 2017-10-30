@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#!/bin/bash
+
+set -e
+
+echo -e "\nGenerating Binary..."
+
+CURRENTDIR=`pwd`
+
+go build -o $CURRENTDIR/out/gobis-server
