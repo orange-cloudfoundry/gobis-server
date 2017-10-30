@@ -1,6 +1,7 @@
 package server
 
 import (
+	"crypto/tls"
 	"fmt"
 	"github.com/cloudfoundry-community/gautocloud"
 	"github.com/cloudfoundry-community/gautocloud/connectors/generic"
@@ -104,6 +105,10 @@ func (s *GobisServer) Load() error {
 	}
 	return nil
 }
+func (s GobisServer) checkCert(cert, key string) error {
+	_, err := tls.LoadX509KeyPair(cert, key)
+	return err
+}
 func (s GobisServer) Run() error {
 	servAddr := s.handler.GetServerAddr()
 	if s.config.LetsEncryptDomains != nil && len(s.config.LetsEncryptDomains) > 0 {
@@ -111,13 +116,15 @@ func (s GobisServer) Run() error {
 		return http.Serve(autocert.NewListener(s.config.LetsEncryptDomains...), s.handler)
 	}
 	log.Infof("Serving gobis server in https on address '%s'", servAddr)
-	err := http.ListenAndServeTLS(servAddr, s.config.Cert, s.config.Key, s.handler)
-	if err != nil {
-		log.Warn("Server wasn't start with tls, maybe you didn't set a cert and key file.")
-		log.Warn("For security reasons you should use tls.")
-		log.Warn("You can use tls easily by setting lets encrypt over cli with --lets-encrypt=example.com,example2.com or through config with key 'lets_encrypt_domain'")
-		log.Warnf("Errors given: '%s'", err.Error())
+	err := s.checkCert(s.config.Cert, s.config.Key)
+	if err == nil {
+		return http.ListenAndServeTLS(servAddr, s.config.Cert, s.config.Key, s.handler)
 	}
+	log.Warn("Server wasn't start with tls, maybe you didn't set a cert and key file.")
+	log.Warn("For security reasons you should use tls.")
+	log.Warn("You can use tls easily by setting lets encrypt over cli with --lets-encrypt=example.com,example2.com or through config with key 'lets_encrypt_domain'")
+	log.Warnf("Errors given: '%s'", err.Error())
+
 	log.Infof("Serving an insecure gobis server in http on address '%s'", servAddr)
 	return http.ListenAndServe(servAddr, s.handler)
 }
