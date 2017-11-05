@@ -20,6 +20,11 @@ deploy:
   - out/gobis-server_linux_amd64
   - out/gobis-server_windows_386.exe
   - out/gobis-server_windows_amd64.exe
+  - out/gobis-server_darwin_amd64.zip
+  - out/gobis-server_linux_386.zip
+  - out/gobis-server_linux_amd64.zip
+  - out/gobis-server_windows_386.zip
+  - out/gobis-server_windows_amd64.zip
   skip_cleanup: true
   on:
     tags: true
