@@ -4,26 +4,16 @@ import (
 	"crypto/tls"
 	"fmt"
 	"github.com/cloudfoundry-community/gautocloud"
-	"github.com/cloudfoundry-community/gautocloud/connectors/generic"
 	"github.com/orange-cloudfoundry/gobis"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/acme/autocert"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
 	"strconv"
+	"strings"
 )
-
-func init() {
-	gautocloud.RegisterConnector(generic.NewSchemaBasedGenericConnector(
-		"gobis-config",
-		".*gobis(_|-)config",
-		[]string{".*gobis(_|-)config"},
-		GobisServerConfig{},
-	))
-}
 
 type GobisServerConfig struct {
 	Host               string             `json:"host" yaml:"host"`
@@ -36,9 +26,9 @@ type GobisServerConfig struct {
 	LogLevel           string             `json:"log_level" yaml:"log_level" cloud-default:"info"`
 	LogJson            bool               `json:"log_json" yaml:"log_json"`
 	NoColor            bool               `json:"no_color" yaml:"no_color"`
-	ConfigPath         string             `json:"config_path" yaml:"config_path" cloud-default:"gobis-config.yml"`
+	ConfigPath         string             `json:"config_path" yaml:"config_path" cloud-default:"config.yml"`
 	ForwardUrl         string             `json:"forward_url" yaml:"forward_url"`
-	LetsEncryptDomains []string           `json:"lets_encrypt_domain" yaml:"lets_encrypt_domain"`
+	LetsEncryptDomains []string           `json:"lets_encrypt_domains" yaml:"lets_encrypt_domains"`
 }
 
 type GobisServer struct {
@@ -54,16 +44,9 @@ func NewGobisServer(config *GobisServerConfig) (*GobisServer, error) {
 	}
 	return server, nil
 }
-func NewGobisCloudServer() (*GobisServer, error) {
-	config := &GobisServerConfig{}
-	err := gautocloud.Inject(config)
-	if err != nil {
-		return nil, err
-	}
-	log.Info("Loading config from cloud environment")
-	return NewGobisServer(config)
-}
+
 func (s *GobisServer) Load() error {
+	s.loadLogConfig()
 	if s.config.Port == 0 {
 		port, _ := strconv.Atoi(os.Getenv("PORT"))
 		s.config.Port = port
@@ -72,10 +55,6 @@ func (s *GobisServer) Load() error {
 		if _, ok := gautocloud.GetAppInfo().Properties["port"]; ok {
 			s.config.Port = gautocloud.GetAppInfo().Properties["port"].(int)
 		}
-	}
-	s.mergeFileConfig(s.config)
-	if len(s.config.Routes) == 0 {
-		return fmt.Errorf("You must configure routes in your config file")
 	}
 	forwardedUrl, err := url.Parse(s.config.ForwardUrl)
 	if err != nil {
@@ -147,27 +126,35 @@ func (s GobisServer) getTlsFilePath(tlsConf string) (string, error) {
 	f.WriteString(tlsConf)
 	return f.Name(), nil
 }
-func (s GobisServer) mergeFileConfig(c *GobisServerConfig) {
-	dat, err := ioutil.ReadFile(c.ConfigPath)
-	if err != nil {
+func (s GobisServer) loadLogConfig() {
+	c := s.config
+
+	if c.LogJson {
+		log.SetFormatter(&log.JSONFormatter{})
+	} else {
+		log.SetFormatter(&log.TextFormatter{
+			DisableColors: c.NoColor,
+		})
+	}
+	if c.LogLevel == "" {
 		return
 	}
-	confFile := gobis.DefaultHandlerConfig{}
-	err = yaml.Unmarshal(dat, &confFile)
-	if err != nil {
-		log.Warnf("Could not unmarshal config file found: %s", err.Error())
+	switch strings.ToUpper(c.LogLevel) {
+	case "ERROR":
+		log.SetLevel(log.ErrorLevel)
+		return
+	case "WARN":
+		log.SetLevel(log.WarnLevel)
+		return
+	case "DEBUG":
+		log.SetLevel(log.DebugLevel)
+		gautocloud.ShowPreviousLog()
+		return
+	case "PANIC":
+		log.SetLevel(log.PanicLevel)
+		return
+	case "FATAL":
+		log.SetLevel(log.FatalLevel)
 		return
 	}
-	if confFile.Port != 0 && !gautocloud.IsInACloudEnv() {
-		c.Port = confFile.Port
-	}
-	if confFile.Host != "" {
-		c.Host = confFile.Host
-	}
-	if confFile.StartPath != "" {
-		c.StartPath = confFile.StartPath
-	}
-	c.ProtectedHeaders = append(c.ProtectedHeaders, confFile.ProtectedHeaders...)
-	c.Routes = append(c.Routes, confFile.Routes...)
-	return
 }
