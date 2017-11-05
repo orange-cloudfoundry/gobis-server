@@ -30,14 +30,14 @@ COMMANDS:
      help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --config-path value, -c value              Path to the config file (default: "config.yml") [$CONFIG_FILE]
+   --config-path value, -c value              Path to the config file (This file will not be used in a cloud env like Cloud Foundry, Heroku or kubernetes) (default: "config.yml") [$CONFIG_FILE]
    --cert value                               Path to a cert file or a cert content to enable https server (default: "server.crt")
    --key value                                Path to a key file or a key content to enable https server (default: "server.key")
    --log-level value, -l value                Log level to use (default: "info")
    --forward-url value, -f value              If set all non-found url by gobis will be forwarded to this url
    --log-json, -j                             Write log in json
    --no-color                                 Logger will not display colors
-   --lets-encrypt-domains value, --led value  If set server will use a certificate generated with let's encypt, value should be your domain(s) (e.g.: --lets-encrypt=example.com[,seconddomain.com]). Host and port will be overwritten to use 0.0.0.0:443
+   --lets-encrypt-domains value, --led value  If set server will use a certificate generated with let's encrypt, value should be your domain(s) (e.g.: --lets-encrypt=example.com[,seconddomain.com]). Host and port will be overwritten to use 0.0.0.0:443
    --help, -h                                 show help
    --version, -v                              print the version
 ```
@@ -156,7 +156,7 @@ your app route which will be under gobis (`cf bind-route-service external.domain
 
 #### On Heroku or Kubernetes
 
-1. Create an env var or service named `.*GOBIS_CONFIG` where you put your configuration in json, example:
+1. Create an env var or service named `.*CONFIG` where you put your configuration in json, example:
 ```json
 {
   "protected_headers": ["x-header-one"],

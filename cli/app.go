@@ -1,10 +1,12 @@
 package cli
 
 import (
+	"fmt"
 	"github.com/cloudfoundry-community/gautocloud"
 	"github.com/cloudfoundry-community/gautocloud/cloudenv"
 	"github.com/cloudfoundry-community/gautocloud/connectors/generic"
 	"github.com/cloudfoundry-community/gautocloud/interceptor/cli/urfave"
+	"github.com/cloudfoundry-community/gautocloud/loader"
 	"github.com/orange-cloudfoundry/gobis-server/server"
 	"github.com/urfave/cli"
 	"os"
@@ -34,7 +36,7 @@ func NewApp() *GobisServerApp {
 		cli.StringFlag{
 			Name:   "config-path, c",
 			Value:  cloudenv.DEFAULT_CONFIG_PATH,
-			Usage:  "Path to the config file",
+			Usage:  "Path to the config file (This file will not be used in a cloud env like Cloud Foundry, Heroku or kubernetes)",
 			EnvVar: cloudenv.LOCAL_CONFIG_ENV_KEY,
 		},
 		cli.StringFlag{
@@ -66,7 +68,7 @@ func NewApp() *GobisServerApp {
 		},
 		cli.StringFlag{
 			Name:  "lets-encrypt-domains, led",
-			Usage: "If set server will use a certificate generated with let's encypt, value should be your domain(s) (e.g.: --lets-encrypt=example.com[,seconddomain.com]). Host and port will be overwritten to use 0.0.0.0:443",
+			Usage: "If set server will use a certificate generated with let's encrypt, value should be your domain(s) (e.g.: --lets-encrypt=example.com[,seconddomain.com]). Host and port will be overwritten to use 0.0.0.0:443",
 		},
 	}
 	return app
@@ -80,7 +82,7 @@ func (a *GobisServerApp) RunServer(c *cli.Context) error {
 	cliInterceptor.SetContext(c)
 
 	confPath := c.GlobalString("config-path")
-	if confPath != os.Getenv(cloudenv.LOCAL_CONFIG_ENV_KEY) {
+	if confPath != os.Getenv(cloudenv.LOCAL_CONFIG_ENV_KEY) && !gautocloud.IsInACloudEnv() {
 		os.Setenv(cloudenv.LOCAL_CONFIG_ENV_KEY, confPath)
 		gautocloud.ReloadConnectors()
 	}
@@ -88,6 +90,9 @@ func (a *GobisServerApp) RunServer(c *cli.Context) error {
 	var config server.GobisServerConfig
 	err := gautocloud.Inject(&config)
 	if err != nil {
+		if _, ok := err.(loader.ErrGiveService); ok {
+			return fmt.Errorf("Configuration cannot be found")
+		}
 		return err
 	}
 
