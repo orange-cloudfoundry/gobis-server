@@ -21,25 +21,25 @@ NAME:
    gobis-server - Create a gobis server based on a config file
 
 USAGE:
-   gobis-server [global options]
+   gobis-server [global options] command [command options] [arguments...]
 
 VERSION:
-   1.1.1
+   1.3.0
 
 COMMANDS:
      help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --config-path value, -c value     Path to the config file (default: "gobis-config.yml")
-   --cert value                      Path to a cert file or a cert content to enable https server (default: "server.crt")
-   --key value                       Path to a key file or a key content to enable https server (default: "server.key")
-   --log-level value, -l value       Log level to use (default: "info")
-   --forward-url value, -f value     If set all non-found url by gobis will be forwarded to this url
-   --log-json, -j                    Write log in json
-   --no-color                        Logger will not display colors
-   --lets-encrypt value, --le value  If set server will use a certificate generated with let's encypt, value should be your domain(s) (e.g.: --lets-encrypt=example.com[,seconddomain.com]). Host and port will be overwritten to use 0.0.0.0:443
-   --help, -h                        show help
-   --version, -v                     print the version
+   --config-path value, -c value              Path to the config file (default: "config.yml") [$CONFIG_FILE]
+   --cert value                               Path to a cert file or a cert content to enable https server (default: "server.crt")
+   --key value                                Path to a key file or a key content to enable https server (default: "server.key")
+   --log-level value, -l value                Log level to use (default: "info")
+   --forward-url value, -f value              If set all non-found url by gobis will be forwarded to this url
+   --log-json, -j                             Write log in json
+   --no-color                                 Logger will not display colors
+   --lets-encrypt-domains value, --led value  If set server will use a certificate generated with let's encypt, value should be your domain(s) (e.g.: --lets-encrypt=example.com[,seconddomain.com]). Host and port will be overwritten to use 0.0.0.0:443
+   --help, -h                                 show help
+   --version, -v                              print the version
 ```
 
 ## Usage
@@ -50,7 +50,7 @@ There is two different usage:
 
 ### In local
 
-1. Create a `gobis-config.yml` file where you want to run your server, following this schema:
+1. Create a `config.yml` file where you want to run your server, following this schema:
 
 ```yaml
 # Host where server should listen (default to 0.0.0.0) 
