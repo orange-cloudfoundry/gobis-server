@@ -148,7 +148,6 @@ func (s GobisServer) loadLogConfig() {
 		return
 	case "DEBUG":
 		log.SetLevel(log.DebugLevel)
-		gautocloud.ShowPreviousLog()
 		return
 	case "PANIC":
 		log.SetLevel(log.PanicLevel)

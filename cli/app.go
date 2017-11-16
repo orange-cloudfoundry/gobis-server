@@ -6,6 +6,7 @@ import (
 	"github.com/cloudfoundry-community/gautocloud/cloudenv"
 	"github.com/cloudfoundry-community/gautocloud/connectors/generic"
 	"github.com/cloudfoundry-community/gautocloud/interceptor/cli/urfave"
+	"github.com/cloudfoundry-community/gautocloud/interceptor/configfile"
 	"github.com/cloudfoundry-community/gautocloud/loader"
 	"github.com/orange-cloudfoundry/gobis-server/server"
 	"github.com/urfave/cli"
@@ -13,11 +14,14 @@ import (
 )
 
 var cliInterceptor *urfave.CliInterceptor
+var confFileIntercept *configfile.ConfigFileInterceptor
 
 func init() {
+	confFileIntercept = configfile.NewConfigFile()
 	cliInterceptor = urfave.NewCli()
 	gautocloud.RegisterConnector(generic.NewConfigGenericConnector(
 		server.GobisServerConfig{},
+		confFileIntercept,
 		cliInterceptor,
 	))
 }
@@ -82,10 +86,7 @@ func (a *GobisServerApp) RunServer(c *cli.Context) error {
 	cliInterceptor.SetContext(c)
 
 	confPath := c.GlobalString("config-path")
-	if confPath != os.Getenv(cloudenv.LOCAL_CONFIG_ENV_KEY) && !gautocloud.IsInACloudEnv() {
-		os.Setenv(cloudenv.LOCAL_CONFIG_ENV_KEY, confPath)
-		gautocloud.ReloadConnectors()
-	}
+	confFileIntercept.SetConfigPath(confPath)
 
 	var config server.GobisServerConfig
 	err := gautocloud.Inject(&config)
