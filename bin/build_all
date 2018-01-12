@@ -1,25 +1,40 @@
+#!/usr/bin/env bash
 #!/bin/bash
 
 set -e
-set -x
 
-OUTDIR=$(dirname $0)/../out
+BASE=$(dirname $0)
+OUTDIR=${BASE}/../out
 BINARYNAME=gobis-server
 CWD=$(pwd)
 
-GOARCH=amd64 GOOS=windows $(dirname $0)/build && cp $OUTDIR/$BINARYNAME "$OUTDIR/${BINARYNAME}_windows_amd64.exe"
-GOARCH=386 GOOS=windows $(dirname $0)/build && cp $OUTDIR/$BINARYNAME "$OUTDIR/${BINARYNAME}_windows_386.exe"
-GOARCH=amd64 GOOS=linux $(dirname $0)/build  && cp $OUTDIR/$BINARYNAME "$OUTDIR/${BINARYNAME}_linux_amd64"
-GOARCH=386 GOOS=linux $(dirname $0)/build  && cp $OUTDIR/$BINARYNAME "$OUTDIR/${BINARYNAME}_linux_386"
-GOARCH=amd64 GOOS=darwin $(dirname $0)/build  && cp $OUTDIR/$BINARYNAME "$OUTDIR/${BINARYNAME}_darwin_amd64"
-echo ""
-echo "--------"
+function build {
+  local arch=$1; shift
+  local os=$1; shift
+  local ext=""
 
-echo "zipping"
-cd $OUTDIR
-zip "${BINARYNAME}_windows_amd64.zip" "${BINARYNAME}_windows_amd64.exe"
-zip "${BINARYNAME}_windows_386.zip" "${BINARYNAME}_windows_386.exe"
-zip "${BINARYNAME}_linux_amd64.zip" "${BINARYNAME}_linux_amd64"
-zip "${BINARYNAME}_linux_386.zip" "${BINARYNAME}_linux_386"
-zip "${BINARYNAME}_darwin_amd64.zip" "${BINARYNAME}_darwin_amd64"
-cd $CWD
+  if [ "${os}" == "windows" ]; then
+      ext=".exe"
+  fi
+
+  cd ${CWD}
+  echo "building gobis-server (${os} ${arch})..."
+  GOARCH=${arch} GOOS=${os} go build -o $OUTDIR/${BINARYNAME}_${os}_${arch}${ext} || {
+    echo >&2 "error: while building gobis-server (${os} ${arch})"
+    return 1
+  }
+
+  echo "zipping gobis-server (${os} ${arch})..."
+  cd $OUTDIR
+  zip "${BINARYNAME}_${os}_${arch}.zip" "${BINARYNAME}_${os}_${arch}${ext}" || {
+    echo >&2 "error: cannot zip file ${BINARYNAME}_${os}_${arch}${ext}"
+    return 1
+  }
+  cd ${CWD}
+}
+
+build amd64 windows
+build 386   windows
+build amd64 linux
+build 386   linux
+build amd64 darwin
