@@ -94,7 +94,7 @@ routes:
   show_error: false
   # It was made to pass arbitrary params to use it after in gobis middlewares
   # Here you can set cors parameters for cors middleware (see doc relative to middlewares)
-  extra_params:
+  middleware_params:
     cors:
       max_age: 12
       allowed_origins:
