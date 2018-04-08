@@ -69,7 +69,7 @@ func (s *GobisServer) Load() error {
 			Port:             s.config.Port,
 			ForwardedUrl:     forwardedUrl,
 		},
-		gobis.NewRouterFactory(MiddlewareHandlers()...),
+		MiddlewareHandlers()...,
 	)
 	if err != nil {
 		return err

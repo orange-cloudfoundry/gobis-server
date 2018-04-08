@@ -92,7 +92,7 @@ func (a *GobisServerApp) RunServer(c *cli.Context) error {
 	err := gautocloud.Inject(&config)
 	if err != nil {
 		if _, ok := err.(loader.ErrGiveService); ok {
-			return fmt.Errorf("Configuration cannot be found")
+			return fmt.Errorf("configuration cannot be found")
 		}
 		return err
 	}
