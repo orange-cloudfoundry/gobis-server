@@ -23,7 +23,7 @@ type GobisServerConfig struct {
 	ProtectedHeaders   []string           `json:"protected_headers" yaml:"protected_headers"`
 	Cert               string             `json:"cert" yaml:"cert" cloud-default:"server.crt"`
 	Key                string             `json:"key" yaml:"key" cloud-default:"server.key"`
-	LogLevel           string             `json:"log_level" yaml:"log_level" cloud-default:"info"`
+	LogLevel           string             `json:"log_level" yaml:"log_level"`
 	LogJson            bool               `json:"log_json" yaml:"log_json"`
 	NoColor            bool               `json:"no_color" yaml:"no_color"`
 	ConfigPath         string             `json:"config_path" yaml:"config_path" cloud-default:"config.yml"`
@@ -136,6 +136,7 @@ func (s GobisServer) loadLogConfig() {
 			DisableColors: c.NoColor,
 		})
 	}
+
 	if c.LogLevel == "" {
 		return
 	}

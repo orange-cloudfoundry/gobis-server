@@ -33,7 +33,7 @@ type GobisServerApp struct {
 func NewApp() *GobisServerApp {
 	app := &GobisServerApp{cli.NewApp()}
 	app.Name = "gobis-server"
-	app.Version = "1.4.0"
+	app.Version = "1.4.1"
 	app.Usage = "Create a gobis server based on a config file"
 	app.ErrWriter = os.Stderr
 	app.Flags = []cli.Flag{
@@ -55,7 +55,6 @@ func NewApp() *GobisServerApp {
 		},
 		cli.StringFlag{
 			Name:  "log-level, l",
-			Value: "info",
 			Usage: "Log level to use",
 		},
 		cli.StringFlag{
@@ -89,6 +88,7 @@ func (a *GobisServerApp) RunServer(c *cli.Context) error {
 	confFileIntercept.SetConfigPath(confPath)
 
 	var config server.GobisServerConfig
+
 	err := gautocloud.Inject(&config)
 	if err != nil {
 		if _, ok := err.(loader.ErrGiveService); ok {
@@ -97,9 +97,11 @@ func (a *GobisServerApp) RunServer(c *cli.Context) error {
 		return err
 	}
 
+
 	gobisServer, err := server.NewGobisServer(&config)
 	if err != nil {
 		return err
 	}
+
 	return gobisServer.Run()
 }
