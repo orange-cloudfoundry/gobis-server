@@ -2,17 +2,16 @@ package server
 
 import (
 	"crypto/tls"
-	"fmt"
 	"github.com/cloudfoundry-community/gautocloud"
 	"github.com/orange-cloudfoundry/gobis"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/acme/autocert"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"os"
 	"strconv"
 	"strings"
+	"fmt"
 )
 
 type GobisServerConfig struct {
@@ -27,7 +26,6 @@ type GobisServerConfig struct {
 	LogJson            bool               `json:"log_json" yaml:"log_json"`
 	NoColor            bool               `json:"no_color" yaml:"no_color"`
 	ConfigPath         string             `json:"config_path" yaml:"config_path" cloud-default:"config.yml"`
-	ForwardUrl         string             `json:"forward_url" yaml:"forward_url"`
 	LetsEncryptDomains []string           `json:"lets_encrypt_domains" yaml:"lets_encrypt_domains"`
 }
 
@@ -56,18 +54,12 @@ func (s *GobisServer) Load() error {
 			s.config.Port = gautocloud.GetAppInfo().Properties["port"].(int)
 		}
 	}
-	forwardedUrl, err := url.Parse(s.config.ForwardUrl)
-	if err != nil {
-		return fmt.Errorf("Cannot parse forward url: " + err.Error())
-	}
+	var err error
 	s.handler, err = gobis.NewDefaultHandler(
 		gobis.DefaultHandlerConfig{
 			ProtectedHeaders: s.config.ProtectedHeaders,
 			StartPath:        s.config.StartPath,
-			Host:             s.config.Host,
 			Routes:           s.config.Routes,
-			Port:             s.config.Port,
-			ForwardedUrl:     forwardedUrl,
 		},
 		MiddlewareHandlers()...,
 	)
@@ -84,12 +76,26 @@ func (s *GobisServer) Load() error {
 	}
 	return nil
 }
+
 func (s GobisServer) checkCert(cert, key string) error {
 	_, err := tls.LoadX509KeyPair(cert, key)
 	return err
 }
+
+func (s GobisServer) serverAddr() string {
+	port := s.config.Port
+	if port == 0 {
+		port = 9080
+	}
+	host := s.config.Host
+	if host == "" {
+		host = "0.0.0.0"
+	}
+	return fmt.Sprintf("%s:%d", host, port)
+}
+
 func (s GobisServer) Run() error {
-	servAddr := s.handler.GetServerAddr()
+	servAddr := s.serverAddr()
 	if s.config.LetsEncryptDomains != nil && len(s.config.LetsEncryptDomains) > 0 {
 		log.Info("Serving gobis server in https on ':443' with let's encrypt certificate (443 is mandatory by let's encrypt).")
 		return http.Serve(autocert.NewListener(s.config.LetsEncryptDomains...), s.handler)
