@@ -57,10 +57,6 @@ func NewApp() *GobisServerApp {
 			Name:  "log-level, l",
 			Usage: "Log level to use",
 		},
-		cli.StringFlag{
-			Name:  "forward-url, f",
-			Usage: "If set all non-found url by gobis will be forwarded to this url",
-		},
 		cli.BoolFlag{
 			Name:  "log-json, j",
 			Usage: "Write log in json",
@@ -96,7 +92,6 @@ func (a *GobisServerApp) RunServer(c *cli.Context) error {
 		}
 		return err
 	}
-
 
 	gobisServer, err := server.NewGobisServer(&config)
 	if err != nil {
