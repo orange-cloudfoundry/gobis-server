@@ -3,7 +3,7 @@ go:
 - "1.11"
 install:
 - go get ./...
-- go get github.com/konsorten/go-windows-terminal-sequences
+- GOARCH="amd64" GOOS="windows" go get github.com/konsorten/go-windows-terminal-sequences
 script: go test -v ./... -args -ginkgo.randomizeAllSpecs -ginkgo.trace
 after_success:
 - bin/build_all
