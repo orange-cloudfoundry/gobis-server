@@ -2,6 +2,7 @@ package server
 
 import (
 	"crypto/tls"
+	"fmt"
 	"github.com/cloudfoundry-community/gautocloud"
 	"github.com/orange-cloudfoundry/gobis"
 	log "github.com/sirupsen/logrus"
@@ -11,7 +12,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"fmt"
 )
 
 type GobisServerConfig struct {
@@ -96,7 +96,7 @@ func (s GobisServer) serverAddr() string {
 
 func (s GobisServer) Run() error {
 	servAddr := s.serverAddr()
-	if s.config.LetsEncryptDomains != nil && len(s.config.LetsEncryptDomains) > 0 {
+	if s.config.LetsEncryptDomains != nil && len(s.config.LetsEncryptDomains) > 0 && s.config.LetsEncryptDomains[0] != "" {
 		log.Info("Serving gobis server in https on ':443' with let's encrypt certificate (443 is mandatory by let's encrypt).")
 		return http.Serve(autocert.NewListener(s.config.LetsEncryptDomains...), s.handler)
 	}
