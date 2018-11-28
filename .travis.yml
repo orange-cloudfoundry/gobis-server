@@ -1,6 +1,6 @@
 language: go
 go:
-- 1.9
+- "1.11"
 install:
 - go get ./...
 script: go test -v ./... -args -ginkgo.randomizeAllSpecs -ginkgo.trace
