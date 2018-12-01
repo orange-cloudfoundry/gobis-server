@@ -11,7 +11,6 @@ import (
 	"net/http"
 	"os"
 	"strconv"
-	"strings"
 )
 
 type GobisServerConfig struct {
@@ -44,7 +43,6 @@ func NewGobisServer(config *GobisServerConfig) (*GobisServer, error) {
 }
 
 func (s *GobisServer) Load() error {
-	s.loadLogConfig()
 	if s.config.Port == 0 {
 		port, _ := strconv.Atoi(os.Getenv("PORT"))
 		s.config.Port = port
@@ -131,36 +129,4 @@ func (s GobisServer) getTlsFilePath(tlsConf string) (string, error) {
 	defer f.Close()
 	f.WriteString(tlsConf)
 	return f.Name(), nil
-}
-func (s GobisServer) loadLogConfig() {
-	c := s.config
-
-	if c.LogJson {
-		log.SetFormatter(&log.JSONFormatter{})
-	} else {
-		log.SetFormatter(&log.TextFormatter{
-			DisableColors: c.NoColor,
-		})
-	}
-
-	if c.LogLevel == "" {
-		return
-	}
-	switch strings.ToUpper(c.LogLevel) {
-	case "ERROR":
-		log.SetLevel(log.ErrorLevel)
-		return
-	case "WARN":
-		log.SetLevel(log.WarnLevel)
-		return
-	case "DEBUG":
-		log.SetLevel(log.DebugLevel)
-		return
-	case "PANIC":
-		log.SetLevel(log.PanicLevel)
-		return
-	case "FATAL":
-		log.SetLevel(log.FatalLevel)
-		return
-	}
 }

@@ -1,4 +1,11 @@
-# Gobis-server
+- [Installation](#installation)
+- [Commands](#commands)
+- [Usage](#usage)
+  - [In local](#in-local)
+  - [In a cloud](#in-a-cloud)
+- [Sidecar](#sidecar)
+  - [Cloud Foundry](#cloud-foundry)
+
 
 Create a [gobis](https://github.com/orange-cloudfoundry/gobis) server based on a config file.
 
@@ -33,9 +40,10 @@ GLOBAL OPTIONS:
    --config-path value, -c value              Path to the config file (This file will not be used in a cloud env like Cloud Foundry, Heroku or kubernetes) (default: "config.yml") [$CONFIG_FILE]
    --cert value                               Path to a cert file or a cert content to enable https server (default: "server.crt")
    --key value                                Path to a key file or a key content to enable https server (default: "server.key")
-   --log-level value, -l value                Log level to use (default: "info")
-   --forward-url value, -f value              If set all non-found url by gobis will be forwarded to this url
+   --log-level value, -l value                Log level to use
    --log-json, -j                             Write log in json
+   --sidecar, -s                              Run server as a sidecar, you can use sidecar-env to force sidecar env detection
+   --sidecar-env value                        Must be use with --sidecar, this permit to force sidecar env detection
    --no-color                                 Logger will not display colors
    --lets-encrypt-domains value, --led value  If set server will use a certificate generated with let's encrypt, value should be your domain(s) (e.g.: --lets-encrypt=example.com[,seconddomain.com]). Host and port will be overwritten to use 0.0.0.0:443
    --help, -h                                 show help
@@ -172,3 +180,40 @@ your app route which will be under gobis (`cf bind-route-service external.domain
 }
 ```
 2. Your configuration should be loaded
+
+
+# Sidecar
+Gobis-server can be used as a sidecar in a container. This actually mean that it will receive all traffic in front of another web app and will reverse to this app.
+Sidecar intentionally force to have one route and redirect everything to app beside. 
+To do so simply run with `--sidecar` argument, this will auto-detect your environment.
+You can chose yourself environment by using argument `--sidecar-env`
+
+Supported environment:
+- `cloudfoundry`
+
+## Cloud Foundry
+Cloud Foundry sidecar expect to be loaded in his own buildpack. We will explain here only lifecycle.
+
+Sidecar expect to find `route.yml` file in working directory with 
+this content for one route and `url`, `name` and `path` can be omitted (it will override if set), e.g.:
+
+```yaml
+insecure_skip_verify: false
+show_error: false
+middleware_params:
+  cors:
+    max_age: 12
+    allowed_origins:
+    - http://localhost
+```
+
+Gobis-server config can be set with normal config file.
+
+Sidecar will do the following:
+1. Load `route.yml` file and add only this route to gobis (`name` will be configured as `proxy-<app-name>` and `path` will be `/**`)
+2. Find an available port to make proxified app listening
+3. Create route url to `http://127.0.0.1:<previous found port>`
+4. Look in `Procfile` if key `start` is found. Content is the custom command for real app that user want to override
+4. Run default launcher from cloud foundry with start command given by user if exists 
+to start real app with `PORT` env var override to previous found port 
+5. Gobis-server will listening on port expected by cloud foundry and will reverse traffic to app beside

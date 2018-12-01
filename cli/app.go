@@ -9,8 +9,11 @@ import (
 	"github.com/cloudfoundry-community/gautocloud/interceptor/configfile"
 	"github.com/cloudfoundry-community/gautocloud/loader"
 	"github.com/orange-cloudfoundry/gobis-server/server"
+	"github.com/orange-cloudfoundry/gobis-server/sidecars"
+	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 	"os"
+	"strings"
 )
 
 var cliInterceptor *urfave.CliInterceptor
@@ -33,7 +36,7 @@ type GobisServerApp struct {
 func NewApp() *GobisServerApp {
 	app := &GobisServerApp{cli.NewApp()}
 	app.Name = "gobis-server"
-	app.Version = "1.4.1"
+	app.Version = "1.5.0"
 	app.Usage = "Create a gobis server based on a config file"
 	app.ErrWriter = os.Stderr
 	app.Flags = []cli.Flag{
@@ -62,6 +65,14 @@ func NewApp() *GobisServerApp {
 			Usage: "Write log in json",
 		},
 		cli.BoolFlag{
+			Name:  "sidecar, s",
+			Usage: "Run server as a sidecar, you can use sidecar-env to force sidecar env detection",
+		},
+		cli.StringFlag{
+			Name:  "sidecar-env",
+			Usage: "Must be use with --sidecar, this permit to force sidecar env detection",
+		},
+		cli.BoolFlag{
 			Name:  "no-color",
 			Usage: "Logger will not display colors",
 		},
@@ -77,15 +88,29 @@ func (a *GobisServerApp) Run(arguments []string) (err error) {
 	a.Action = a.RunServer
 	return a.App.Run(arguments)
 }
+
+func (a *GobisServerApp) loadSidecar(config *server.GobisServerConfig, sidecarEnv string) error {
+	if sidecarEnv == "" {
+		sidecarEnv = gautocloud.CurrentCloudEnv().Name()
+	}
+	log.Info("Loading sidecar ...")
+	for _, sidecar := range sidecars.Retrieve() {
+		if sidecar.CloudEnvName() == sidecarEnv {
+			log.Infof("Sidecar for %s is loading", sidecar.CloudEnvName())
+			return sidecar.Run(config)
+		}
+	}
+	log.Warnf("No sidecar has been found for %s environment", sidecarEnv)
+	return nil
+}
+
 func (a *GobisServerApp) RunServer(c *cli.Context) error {
 	cliInterceptor.SetContext(c)
-
 	confPath := c.GlobalString("config-path")
 	confFileIntercept.SetConfigPath(confPath)
 
-	var config server.GobisServerConfig
-
-	err := gautocloud.Inject(&config)
+	config := &server.GobisServerConfig{}
+	err := gautocloud.Inject(config)
 	if err != nil {
 		if _, ok := err.(loader.ErrGiveService); ok {
 			return fmt.Errorf("configuration cannot be found")
@@ -93,10 +118,50 @@ func (a *GobisServerApp) RunServer(c *cli.Context) error {
 		return err
 	}
 
-	gobisServer, err := server.NewGobisServer(&config)
+	loadLogConfig(config)
+
+	if c.GlobalBool("sidecar") {
+		err = a.loadSidecar(config, c.GlobalString("sidecar-env"))
+		if err != nil {
+			return err
+		}
+	}
+
+	gobisServer, err := server.NewGobisServer(config)
 	if err != nil {
 		return err
 	}
 
 	return gobisServer.Run()
+}
+
+func loadLogConfig(c *server.GobisServerConfig) {
+	if c.LogJson {
+		log.SetFormatter(&log.JSONFormatter{})
+	} else {
+		log.SetFormatter(&log.TextFormatter{
+			DisableColors: c.NoColor,
+		})
+	}
+
+	if c.LogLevel == "" {
+		return
+	}
+	switch strings.ToUpper(c.LogLevel) {
+	case "ERROR":
+		log.SetLevel(log.ErrorLevel)
+		return
+	case "WARN":
+		log.SetLevel(log.WarnLevel)
+		return
+	case "DEBUG":
+		log.SetLevel(log.DebugLevel)
+		return
+	case "PANIC":
+		log.SetLevel(log.PanicLevel)
+		return
+	case "FATAL":
+		log.SetLevel(log.FatalLevel)
+		return
+	}
 }
