@@ -194,7 +194,7 @@ Supported environment:
 - `cloudfoundry`
 
 ## Cloud Foundry
-Cloud Foundry sidecar expect to be loaded in his own buildpack. We will explain here only lifecycle.
+Cloud Foundry sidecar expect to be loaded in his own [buildpack](https://github.com/orange-cloudfoundry/gobis-buildpack). We will explain here only lifecycle.
 
 Sidecar expect to find `route.yml` file in working directory with 
 this content for one route and `url`, `name` and `path` can be omitted (it will override if set), e.g.:
