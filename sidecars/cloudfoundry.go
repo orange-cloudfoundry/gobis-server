@@ -47,8 +47,8 @@ func (s CFSidecar) Run(config *server.GobisServerConfig) error {
 	}
 	route.Name = "proxy-" + appInfo.Name
 	route.Path = "/**"
-	appPort := generatePort(8081, 65534)
-	route.Url = fmt.Sprintf("http://127.0.0.1:%d", appPort)
+	appPort := os.Getenv("GOBIS_PORT")
+	route.Url = fmt.Sprintf("http://127.0.0.1:%s", appPort)
 	config.Routes = []gobis.ProxyRoute{route}
 	entry.Debug("Finished loading route ...")
 
@@ -81,7 +81,7 @@ func (s CFSidecar) Run(config *server.GobisServerConfig) error {
 	}
 	entry.Debug("Finished executing launcher to start real process.")
 
-	log.Infof("Real app is listening on port '%d' , you can use internal domain to bypass gobis", appPort)
+	log.Infof("Real app is listening on port '%s' , you can use internal domain to bypass gobis", appPort)
 	return nil
 }
 
@@ -126,20 +126,20 @@ func (CFSidecar) loadingRouteParams() (map[string]interface{}, error) {
 	return params, result
 }
 
-func (CFSidecar) appEnv(port int) []string {
+func (CFSidecar) appEnv(port string) []string {
 	envv := os.Environ()
 	hasPort := false
 	for i := 0; i < len(envv); i++ {
 		if strings.HasPrefix(envv[i], "VCAP_APP_PORT=") {
-			envv[i] = fmt.Sprintf("VCAP_APP_PORT=%d", port)
+			envv[i] = fmt.Sprintf("VCAP_APP_PORT=%s", port)
 		}
 		if strings.HasPrefix(envv[i], "PORT=") {
-			envv[i] = fmt.Sprintf("PORT=%d", port)
+			envv[i] = fmt.Sprintf("PORT=%s", port)
 			hasPort = true
 		}
 	}
 	if !hasPort {
-		envv = append(envv, fmt.Sprintf("PORT=%d", port))
+		envv = append(envv, fmt.Sprintf("PORT=%s", port))
 	}
 	return envv
 }

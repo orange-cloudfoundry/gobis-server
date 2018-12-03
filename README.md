@@ -212,7 +212,7 @@ Gobis-server config can be set with normal config file.
 Sidecar will do the following:
 1. Load `.gobis/route.yml` file and add only this route to gobis (`name` will be configured as `proxy-<app-name>` and `path` will be `/**`)
 2. Look for all files named as follow `.gobis/*-params.yml` and load them as middleware params to be injected in route.
-3. Find an available port to make proxified app listening
+3. Get from env var `GOBIS_PORT` to know where app should listen
 4. Create route url to `http://127.0.0.1:<previous found port>`
 5. Look in `Procfile` if key `start` is found. Content is the custom command for real app that user want to override
 6. Run default launcher from cloud foundry with start command given by user if exists 
