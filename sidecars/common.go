@@ -47,3 +47,10 @@ func Retrieve() []Sidecar {
 		CFSidecar{},
 	}
 }
+
+func mergeMap(old, new map[string]interface{}) map[string]interface{} {
+	for k, v := range new {
+		old[k] = v
+	}
+	return old
+}

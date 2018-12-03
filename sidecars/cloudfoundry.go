@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/cloudfoundry-community/gautocloud"
 	"github.com/cloudfoundry-community/gautocloud/cloudenv"
+	"github.com/hashicorp/go-multierror"
 	"github.com/orange-cloudfoundry/gobis"
 	"github.com/orange-cloudfoundry/gobis-server/server"
 	log "github.com/sirupsen/logrus"
@@ -20,6 +21,7 @@ const (
 	launcherName string = "launcher"
 	routeFile    string = "route.yml"
 	procFile     string = "Procfile"
+	gobisFolder  string = ".gobis"
 )
 
 type CFSidecar struct {
@@ -34,22 +36,35 @@ func (s CFSidecar) Run(config *server.GobisServerConfig) error {
 	config.LetsEncryptDomains = []string{}
 	config.Port = appInfo.Port
 
-	entry.Debug("Loading route.yml ...")
-	b, err := ioutil.ReadFile(routeFile)
+	entry.Debug("Loading route config...")
+	route, err := s.loadingRouteConfig()
 	if err != nil {
-		return err
-	}
-	var route gobis.ProxyRoute
-	err = yaml.Unmarshal(b, &route)
-	if err != nil {
-		return err
+		entry.Warn(
+			"Something went wrong when loading %s, so it use only default configuration, see details: %s",
+			filepath.Join(gobisFolder, routeFile),
+			err.Error(),
+		)
 	}
 	route.Name = "proxy-" + appInfo.Name
 	route.Path = "/**"
 	appPort := generatePort(8081, 65534)
 	route.Url = fmt.Sprintf("http://127.0.0.1:%d", appPort)
 	config.Routes = []gobis.ProxyRoute{route}
-	entry.Debug("Finished loading route.yml ...")
+	entry.Debug("Finished loading route ...")
+
+	entry.Debug("Loading params files...")
+	params, err := s.loadingRouteParams()
+	if err != nil {
+		entry.Warn(
+			"Something went wrong when loading params files: %s",
+			err.Error(),
+		)
+	}
+	if route.MiddlewareParams != nil {
+		params = mergeMap(params, route.MiddlewareParams.(map[string]interface{}))
+	}
+	route.MiddlewareParams = params
+	entry.Debug("Finished loading params files...")
 
 	entry.Debug("Executing launcher to start real process ...")
 	lPath := s.launcherPath()
@@ -71,6 +86,47 @@ func (s CFSidecar) Run(config *server.GobisServerConfig) error {
 
 	log.Infof("Real app is listening on port '%d' , you can use internal domain to bypass gobis", appPort)
 	return nil
+}
+
+func (CFSidecar) loadingRouteConfig() (gobis.ProxyRoute, error) {
+	var route gobis.ProxyRoute
+	b, err := ioutil.ReadFile(filepath.Join(gobisFolder, routeFile))
+	if err != nil {
+		return route, err
+	}
+	if err == nil {
+		err = yaml.Unmarshal(b, route)
+		if err != nil {
+			return route, err
+		}
+	}
+	return route, nil
+}
+
+func (CFSidecar) loadingRouteParams() (map[string]interface{}, error) {
+	params := make(map[string]interface{})
+	var files []string
+	var err error
+	files, err = filepath.Glob(filepath.Join(gobisFolder, "*-params.yml"))
+	if err != nil {
+		return params, err
+	}
+	var result error
+	for _, f := range files {
+		b, err := ioutil.ReadFile(f)
+		if err != nil {
+			result = multierror.Append(result, err)
+			continue
+		}
+		var newParams map[string]interface{}
+		err = yaml.Unmarshal(b, &newParams)
+		if err != nil {
+			result = multierror.Append(result, err)
+			continue
+		}
+		params = mergeMap(params, newParams)
+	}
+	return params, result
 }
 
 func (CFSidecar) appEnv(port int) []string {

@@ -210,10 +210,11 @@ middleware_params:
 Gobis-server config can be set with normal config file.
 
 Sidecar will do the following:
-1. Load `route.yml` file and add only this route to gobis (`name` will be configured as `proxy-<app-name>` and `path` will be `/**`)
-2. Find an available port to make proxified app listening
-3. Create route url to `http://127.0.0.1:<previous found port>`
-4. Look in `Procfile` if key `start` is found. Content is the custom command for real app that user want to override
-4. Run default launcher from cloud foundry with start command given by user if exists 
+1. Load `.gobis/route.yml` file and add only this route to gobis (`name` will be configured as `proxy-<app-name>` and `path` will be `/**`)
+2. Look for all files named as follow `.gobis/*-params.yml` and load them as middleware params to be injected in route.
+3. Find an available port to make proxified app listening
+4. Create route url to `http://127.0.0.1:<previous found port>`
+5. Look in `Procfile` if key `start` is found. Content is the custom command for real app that user want to override
+6. Run default launcher from cloud foundry with start command given by user if exists 
 to start real app with `PORT` env var override to previous found port 
-5. Gobis-server will listening on port expected by cloud foundry and will reverse traffic to app beside
+7. Gobis-server will listening on port expected by cloud foundry and will reverse traffic to app beside

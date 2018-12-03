@@ -111,15 +111,13 @@ func (a *GobisServerApp) RunServer(c *cli.Context) error {
 
 	config := &server.GobisServerConfig{}
 	err := gautocloud.Inject(config)
-	if err != nil {
+	if err != nil && !c.GlobalBool("sidecar") {
 		if _, ok := err.(loader.ErrGiveService); ok {
 			return fmt.Errorf("configuration cannot be found")
 		}
 		return err
 	}
-
 	loadLogConfig(config)
-
 	if c.GlobalBool("sidecar") {
 		err = a.loadSidecar(config, c.GlobalString("sidecar-env"))
 		if err != nil {
