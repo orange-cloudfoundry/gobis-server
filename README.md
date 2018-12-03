@@ -1,3 +1,12 @@
+# Gobis-server
+
+Create a [gobis](https://github.com/orange-cloudfoundry/gobis) server based on a config file.
+
+The standalone server will make available all middlewares you can found in [gobis-middlewares](https://github.com/orange-cloudfoundry/gobis-middlewares)
+
+**Note**: To enable them in your route see parameters to set on each ones
+
+**Summary**:
 - [Installation](#installation)
 - [Commands](#commands)
 - [Usage](#usage)
@@ -5,13 +14,6 @@
   - [In a cloud](#in-a-cloud)
 - [Sidecar](#sidecar)
   - [Cloud Foundry](#cloud-foundry)
-
-
-Create a [gobis](https://github.com/orange-cloudfoundry/gobis) server based on a config file.
-
-The standalone server will make available all middlewares you can found in [gobis-middlewares](https://github.com/orange-cloudfoundry/gobis-middlewares)
-
-**Note**: To enable them in your route see parameters to set on each ones
 
 ## Installation
 
