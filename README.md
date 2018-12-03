@@ -72,19 +72,27 @@ protected_headers: []
 # Set the path where all path from route should start (e.g.: if set to `/root` request for the next route will be localhost/root/app)
 start_path: ""
 routes:
-  # Name of your route
+  # Name of your routes
 - name: myapi
   # Path which gobis handler should listen to
   # You can use globs:
   #   - appending /* will only make requests available in first level of upstream
   #   - appending /** will pass everything to upstream
   path: /app/**
-  # Upstream url where all request will be redirected
-  # Query parameters can be passed, e.g.: http://localhost?param=1
-  # User and password are given as basic auth too (this is not recommended to use it), e.g.: http://user:password@localhost
+  # Upstream url where all request will be redirected (if ForwardedHeader option not set)
+  # Query parameters can be passed, e.g.: http:#localhost?param=1
+  # User and password are given as basic auth too (this is not recommended to use it), e.g.: http:#user:password@localhost
+  # Can be empty if ForwardedHeader is set
+  # This is ignored if ForwardHandler is set
   url: http://www.mocky.io/v2/595625d22900008702cd71e8
+  # If set upstream url will be took from the value of this header inside the received request
+  # Url option will be used for the router to match host and path (if not empty) found in value of this header and host and path found in url (If NoUrlMatch is false)
+  # this useful, for example, to create a cloud foundry routes service: https:#docs.cloudfoundry.org/services/route-services.html
+  forwarded_header: ""
   # List of headers which should not be sent to upstream
   sensitive_headers: []
+  # List of http methods allowed (Default: all methods are accepted)
+  methods: []
   # An url to an http proxy to make requests to upstream pass to this
   http_proxy: ""
   # An url to an https proxy to make requests to upstream pass to this
@@ -96,12 +104,14 @@ routes:
   no_buffer: false
   # Set to true to not send X-Forwarded-* headers to upstream
   remove_proxy_headers: false
-  #  An url to an http proxy to make request to upstream pass to this
-  methods: []
-  # Set to true to not check ssl certificates from upstream (not recommended)
+  # Set to true to not check ssl certificates from upstream (not really recommended)
   insecure_skip_verify: false
   # Set to true to see errors on web page when there is a panic error on gobis
   show_error: false
+  # Chain others routes in a routes
+  routes: ~
+  # Will forward directly to proxified route OPTIONS method without using middlewares
+  options_passthrough: false
   # It was made to pass arbitrary params to use it after in gobis middlewares
   # Here you can set cors parameters for cors middleware (see doc relative to middlewares)
   middleware_params:
