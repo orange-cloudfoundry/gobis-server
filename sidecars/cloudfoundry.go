@@ -71,6 +71,7 @@ func (s CFSidecar) Run(config *server.GobisServerConfig) error {
 	wd, _ := os.Getwd()
 	cmd := exec.Command(lPath, wd, s.getUserStartCommand(), "")
 	cmd.Env = s.appEnv(appPort)
+	cmd.Dir = filepath.Dir(wd)
 	lEntryOut := entry.WithField("process", lPath)
 	lEntryOut.Level = log.InfoLevel
 	lEntryErr := entry.WithField("process", lPath)

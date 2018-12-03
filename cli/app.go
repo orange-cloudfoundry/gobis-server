@@ -36,7 +36,7 @@ type GobisServerApp struct {
 func NewApp() *GobisServerApp {
 	app := &GobisServerApp{cli.NewApp()}
 	app.Name = "gobis-server"
-	app.Version = "1.5.0"
+	app.Version = "1.5.1"
 	app.Usage = "Create a gobis server based on a config file"
 	app.ErrWriter = os.Stderr
 	app.Flags = []cli.Flag{
@@ -111,11 +111,22 @@ func (a *GobisServerApp) RunServer(c *cli.Context) error {
 
 	config := &server.GobisServerConfig{}
 	err := gautocloud.Inject(config)
-	if err != nil && !c.GlobalBool("sidecar") {
-		if _, ok := err.(loader.ErrGiveService); ok {
-			return fmt.Errorf("configuration cannot be found")
+	if err != nil {
+		if c.GlobalBool("sidecar") {
+			config.Cert = c.GlobalString("cert")
+			config.Key = c.GlobalString("key")
+			config.LogLevel = c.GlobalString("log-level")
+			config.LogJson = c.GlobalBool("log-json")
+			config.NoColor = c.GlobalBool("no-color")
+			if c.GlobalString("lets-encrypt-domains") != "" {
+				config.LetsEncryptDomains = strings.Split(c.GlobalString("lets-encrypt-domains"), ",")
+			}
+		} else {
+			if _, ok := err.(loader.ErrGiveService); ok {
+				return fmt.Errorf("configuration cannot be found")
+			}
+			return err
 		}
-		return err
 	}
 	loadLogConfig(config)
 	if c.GlobalBool("sidecar") {
