@@ -49,7 +49,6 @@ func (s CFSidecar) Run(config *server.GobisServerConfig) error {
 	route.Path = "/**"
 	appPort := os.Getenv("GOBIS_PORT")
 	route.Url = fmt.Sprintf("http://127.0.0.1:%s", appPort)
-	config.Routes = []gobis.ProxyRoute{route}
 	entry.Debug("Finished loading route ...")
 
 	entry.Debug("Loading params files...")
@@ -65,6 +64,8 @@ func (s CFSidecar) Run(config *server.GobisServerConfig) error {
 	}
 	route.MiddlewareParams = params
 	entry.Debug("Finished loading params files...")
+
+	config.Routes = []gobis.ProxyRoute{route}
 
 	entry.Debug("Executing launcher to start real process ...")
 	lPath := s.launcherPath()
