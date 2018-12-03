@@ -39,7 +39,7 @@ func (s CFSidecar) Run(config *server.GobisServerConfig) error {
 	entry.Debug("Loading route config...")
 	route, err := s.loadingRouteConfig()
 	if err != nil {
-		entry.Warn(
+		entry.Warnf(
 			"Something went wrong when loading %s, so it use only default configuration, see details: %s",
 			filepath.Join(gobisFolder, routeFile),
 			err.Error(),
@@ -55,7 +55,7 @@ func (s CFSidecar) Run(config *server.GobisServerConfig) error {
 	entry.Debug("Loading params files...")
 	params, err := s.loadingRouteParams()
 	if err != nil {
-		entry.Warn(
+		entry.Warnf(
 			"Something went wrong when loading params files: %s",
 			err.Error(),
 		)
