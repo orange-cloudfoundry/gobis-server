@@ -36,7 +36,7 @@ type GobisServerApp struct {
 func NewApp() *GobisServerApp {
 	app := &GobisServerApp{cli.NewApp()}
 	app.Name = "gobis-server"
-	app.Version = "1.5.1"
+	app.Version = "1.5.2"
 	app.Usage = "Create a gobis server based on a config file"
 	app.ErrWriter = os.Stderr
 	app.Flags = []cli.Flag{
