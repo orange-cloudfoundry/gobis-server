@@ -46,7 +46,7 @@ func (s CFSidecar) Run(config *server.GobisServerConfig) error {
 		)
 	}
 	route.Name = "proxy-" + appInfo.Name
-	route.Path = "/**"
+	route.Path = gobis.NewPathMatcher("/**")
 	appPort := os.Getenv("GOBIS_PORT")
 	route.Url = fmt.Sprintf("http://127.0.0.1:%s", appPort)
 	entry.Debug("Finished loading route ...")
