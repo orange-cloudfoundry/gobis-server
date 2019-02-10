@@ -7,6 +7,7 @@ BASE=$(dirname $0)
 OUTDIR=${BASE}/../out
 BINARYNAME=gobis-server
 CWD=$(pwd)
+version=$(echo "${TRAVIS_BRANCH:-dev}" | sed 's/^v//')
 
 function build {
   local arch=$1; shift
@@ -19,7 +20,7 @@ function build {
 
   cd ${CWD}
   echo "building gobis-server (${os} ${arch})..."
-  GOARCH=${arch} GOOS=${os} go build -o $OUTDIR/${BINARYNAME}_${os}_${arch}${ext} || {
+  GOARCH=${arch} GOOS=${os} go build -ldflags="-s -w -X main.Version=${version}" -o $OUTDIR/${BINARYNAME}_${os}_${arch}${ext} || {
     echo >&2 "error: while building gobis-server (${os} ${arch})"
     return 1
   }
@@ -34,7 +35,5 @@ function build {
 }
 
 build amd64 windows
-build 386   windows
 build amd64 linux
-build 386   linux
 build amd64 darwin

@@ -1,36 +1,32 @@
 language: go
 go:
-- "1.11"
+  - "1.11"
 install:
-- go get ./...
-- GOARCH="amd64" GOOS="windows" go get github.com/konsorten/go-windows-terminal-sequences
+  - export GO111MODULE=on
+  - GOARCH="amd64" GOOS="windows" go get github.com/konsorten/go-windows-terminal-sequences
 script: go test -v ./... -args -ginkgo.randomizeAllSpecs -ginkgo.trace
 after_success:
-- bin/build_all
-- docker build -t orangeopensource/gobis-server .
-- if [ "x$TRAVIS_TAG" != "x" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"; docker build -t orangeopensource/gobis-server:$( echo "$TRAVIS_TAG" | cut -c 2- ) .; fi
-- if [ "x$TRAVIS_TAG" != "x" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"; docker push orangeopensource/gobis-server:$( echo "$TRAVIS_TAG" | cut -c 2- ); fi
-- if [ "x$TRAVIS_TAG" != "x" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"; docker push orangeopensource/gobis-server; fi
+  - bin/build_all
+  - docker build -t orangeopensource/gobis-server .
+  - if [ "x$TRAVIS_TAG" != "x" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"; docker build -t orangeopensource/gobis-server:$( echo "$TRAVIS_TAG" | cut -c 2- ) .; fi
+  - if [ "x$TRAVIS_TAG" != "x" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"; docker push orangeopensource/gobis-server:$( echo "$TRAVIS_TAG" | cut -c 2- ); fi
+  - if [ "x$TRAVIS_TAG" != "x" ]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"; docker push orangeopensource/gobis-server; fi
 deploy:
   provider: releases
   api_key:
     secure: pHwqc8JACW/zrng1/6KbSTVFlaIfb6Mi3zwBhpxm53J3P5XknaZQip1zFqXKXFEM7ecME3ryqpl0uGv+kz8BMiTHb8/+lrVJDOUOzFXiALBxqAbwDMvZT9kDNn9fxis42F+gx/rGPXsr6dm6ylBuzCsFjuAOYqpUk+JL7EWoVJRVFGilJXVEVHzxhM+jKm4BtTgYouKK/R1wzB+/ujsU0VW2anO8AwF8wjMKv1U6B6BUfOHz2gXjFcVv+sFtjJo8WemPt6dSGvpnEVk91gCiXUFKhtVySgLyzawSdnasm8cCgdd3VByahBrnlNZPAHQmAjl1ZqLs2rJBvpu5fjV9CW8kS+WpuxZYzYxa3qTx6RrZ5FQarjAK/yoCG2UEouDUvaVy223phYS8e7BagD8bznLOVRN8sRKYBI6X+i8MqpvBdX20XDQL43coGnx8IwkOmmWGctlpPHTDW5CkKJnLiucCZxq+zHmUvEDwNLFmQx8bY9wFlLZZ4ntIpCRc55bY8SbMCSZUpBf2qYSZ8uN1FkQM+Rba1u6iqgs4/pWDftEeu/f4LMLkfWFlvGKyKMhImAiRdChDu+T4VQgGZ1l7EiIevtOLwWjFHyKDE+WoijVr7S7zAugMQaNRujvGbPNCcbH/5J7Y/ZUgwUqyuwi87NafHC7h/W3bfrjc3ezvLBg=
   file:
-  - out/gobis-server_darwin_amd64
-  - out/gobis-server_linux_386
-  - out/gobis-server_linux_amd64
-  - out/gobis-server_windows_386.exe
-  - out/gobis-server_windows_amd64.exe
-  - out/gobis-server_darwin_amd64.zip
-  - out/gobis-server_linux_386.zip
-  - out/gobis-server_linux_amd64.zip
-  - out/gobis-server_windows_386.zip
-  - out/gobis-server_windows_amd64.zip
+    - out/gobis-server_darwin_amd64
+    - out/gobis-server_linux_amd64
+    - out/gobis-server_windows_amd64.exe
+    - out/gobis-server_darwin_amd64.zip
+    - out/gobis-server_linux_amd64.zip
+    - out/gobis-server_windows_amd64.zip
   skip_cleanup: true
   on:
     tags: true
     all_branches: true
 env:
   global:
-  - secure: AM3dV90sFwa/GX2EHtp8U+JRoNzlprgO4VUbpmUWb2cPXJVGLmdQuEP17eqV5x1S9hn3o6HZDMvPGSfZVyd4JMq1Oqlu05Qmat+fnFNMU3mmwo5aX3eOQqH5GI277y4JYD4S9J1K5yRyHhfJxI+c5DDUq5yznEBxeW69PbTZkwoPC9l33jl0kQ/2DR523VPUvdsUfsO1qGnus+i9QUXXXKnIu0QMBPHxnbfAj6Cku8/FNWqklHBlJO7GEv5ZrJZxkCVZcWqTJnWQCek4pRC9eMA0mqb5JZXb45HWnMjt4vJAfuEstqNan04zVfaxMlKf7JCH8k+jDPPzrsH3jVdUtrRhtYqiCh61MPlCOpZ/eZHeNR0ATEkvUvlwWIdGN/yEbDmqaZnbUhAnrKgf8t/c5dwGW32C1bmbddxOzsTrvoGIeh1sK9JwNWYnLLBOrkJg7yCCqbwU2sr4dFn8sO9KD8bZ1E03A6Qlcc2tMJmj8Bkdln5Ndkr9J27PJucPfAKmQZo9O0UL9UZMnWJ9ItLI57ur4YbEilv3gL8pm7x4pwzgUOPWAy4Zo+x3aPrwHb/ATHOoc6kx0jn0BYqY/QfWIe2Fk3ptG9d1PiaV22G7Cm7qfFLYnDu17A52Z9K/OvpKz34/gxFrYAxE0oYcn8s1PiDxBf/2Ngyh3oFzKxqqj3Y=
-  - secure: g7xpy2d77r6yiatU14Hl7t/5w/w5NLoquFzH3qJd2LBmToOb5M5nHC3MkHE7HYccBWn/p0ON1BfXLLANHlMeHY2PTNWoxRjBAT7Vu+uKodewKPOWDJ6NjLZBv2QmkripTrt+YLHrK/QoJHb0luLmftbTSIhsFcPiwDfE/lQZe5oeUUnXRn3ELrQ2lrq2M63svugXYhQJ0lIRPItzX1NmuKjmkSoLl5m1LXnjb0DRFYPVUNLkrageYVSQizNvFsCHj1o59sq9Yfu4qjZp1kUmgNPuw9C8t9tWRcmhdURac59LFz61SPySUBQlSLPNv8Tc/xulMi8dsExiPnsScStN3/3M3RyGlCoDYU+nwyDbgtNIEHU4lm69DbTcik9gvQebyUoaiDZTvByvHMM1PonEXNfu2nTAV/agbNck7FHR2B2kM1X4YzmM8r47wV1tnyrygZveyyhQOjQYPOhv8MSRVL0pnawYeZLxCZdwBqr3wW9pv3/mNpbkf1zsP8Hb0CKKUBLF+2SAWRxUzqXRQZ6mkaAWR8QD1icBio1Jpdn58oeb9BxOPWgy2zPlpBmUnMz+fNrgibgIJTZrTN3lsKvDWP/bwdsXNGA9hL7q1z0MtkXIGv7Y5IVEzec0Fly0L9OMXtW/WHwHcWY+GziTQVcb+ss2uZy0AfOLSGb8tmNGrXQ=
+    - secure: AM3dV90sFwa/GX2EHtp8U+JRoNzlprgO4VUbpmUWb2cPXJVGLmdQuEP17eqV5x1S9hn3o6HZDMvPGSfZVyd4JMq1Oqlu05Qmat+fnFNMU3mmwo5aX3eOQqH5GI277y4JYD4S9J1K5yRyHhfJxI+c5DDUq5yznEBxeW69PbTZkwoPC9l33jl0kQ/2DR523VPUvdsUfsO1qGnus+i9QUXXXKnIu0QMBPHxnbfAj6Cku8/FNWqklHBlJO7GEv5ZrJZxkCVZcWqTJnWQCek4pRC9eMA0mqb5JZXb45HWnMjt4vJAfuEstqNan04zVfaxMlKf7JCH8k+jDPPzrsH3jVdUtrRhtYqiCh61MPlCOpZ/eZHeNR0ATEkvUvlwWIdGN/yEbDmqaZnbUhAnrKgf8t/c5dwGW32C1bmbddxOzsTrvoGIeh1sK9JwNWYnLLBOrkJg7yCCqbwU2sr4dFn8sO9KD8bZ1E03A6Qlcc2tMJmj8Bkdln5Ndkr9J27PJucPfAKmQZo9O0UL9UZMnWJ9ItLI57ur4YbEilv3gL8pm7x4pwzgUOPWAy4Zo+x3aPrwHb/ATHOoc6kx0jn0BYqY/QfWIe2Fk3ptG9d1PiaV22G7Cm7qfFLYnDu17A52Z9K/OvpKz34/gxFrYAxE0oYcn8s1PiDxBf/2Ngyh3oFzKxqqj3Y=
+    - secure: g7xpy2d77r6yiatU14Hl7t/5w/w5NLoquFzH3qJd2LBmToOb5M5nHC3MkHE7HYccBWn/p0ON1BfXLLANHlMeHY2PTNWoxRjBAT7Vu+uKodewKPOWDJ6NjLZBv2QmkripTrt+YLHrK/QoJHb0luLmftbTSIhsFcPiwDfE/lQZe5oeUUnXRn3ELrQ2lrq2M63svugXYhQJ0lIRPItzX1NmuKjmkSoLl5m1LXnjb0DRFYPVUNLkrageYVSQizNvFsCHj1o59sq9Yfu4qjZp1kUmgNPuw9C8t9tWRcmhdURac59LFz61SPySUBQlSLPNv8Tc/xulMi8dsExiPnsScStN3/3M3RyGlCoDYU+nwyDbgtNIEHU4lm69DbTcik9gvQebyUoaiDZTvByvHMM1PonEXNfu2nTAV/agbNck7FHR2B2kM1X4YzmM8r47wV1tnyrygZveyyhQOjQYPOhv8MSRVL0pnawYeZLxCZdwBqr3wW9pv3/mNpbkf1zsP8Hb0CKKUBLF+2SAWRxUzqXRQZ6mkaAWR8QD1icBio1Jpdn58oeb9BxOPWgy2zPlpBmUnMz+fNrgibgIJTZrTN3lsKvDWP/bwdsXNGA9hL7q1z0MtkXIGv7Y5IVEzec0Fly0L9OMXtW/WHwHcWY+GziTQVcb+ss2uZy0AfOLSGb8tmNGrXQ=

@@ -8,11 +8,13 @@ import (
 	"os"
 )
 
+var Version string
+
 func init() {
 	server.AddMiddlewareHandlers(middlewares.DefaultHandlers()...)
 }
 func main() {
-	gobisServer := cli.NewApp()
+	gobisServer := cli.NewApp(Version)
 	err := gobisServer.Run(os.Args)
 	if err != nil {
 		log.Error(err)
