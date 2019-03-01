@@ -1,30 +1,39 @@
 module github.com/orange-cloudfoundry/gobis-server
 
+replace github.com/golang/lint => github.com/golang/lint v0.0.0-20190227174305-8f45f776aaf1
+
 require (
 	cloud.google.com/go v0.36.0 // indirect
 	dmitri.shuralyov.com/app/changes v0.0.0-20181114035150-5af16e21babb // indirect
-	dmitri.shuralyov.com/service/change v0.0.0-20190203163610-217368fe4577 // indirect
+	dmitri.shuralyov.com/service/change v0.0.0-20190301072032-c25fb47d71b3 // indirect
 	git.apache.org/thrift.git v0.12.0 // indirect
-	github.com/Shopify/sarama v1.20.1 // indirect
+	github.com/Shopify/sarama v1.21.0 // indirect
 	github.com/cloudfoundry-community/gautocloud v1.1.0
 	github.com/codegangsta/negroni v1.0.0 // indirect
-	github.com/coreos/go-systemd v0.0.0-20190204112023-081494f7ee4f // indirect
+	github.com/coreos/go-systemd v0.0.0-20190212144455-93d5ec2c7f76 // indirect
+	github.com/gliderlabs/ssh v0.1.3 // indirect
 	github.com/go-logfmt/logfmt v0.4.0 // indirect
-	github.com/gogo/protobuf v1.2.0 // indirect
-	github.com/golang/lint v0.0.0-20181217174547-8f45f776aaf1 // indirect
-	github.com/google/pprof v0.0.0-20190208070709-b421f19a5c07 // indirect
+	github.com/gogo/protobuf v1.2.1 // indirect
+	github.com/golang/lint v0.0.0-20190227174305-5b3e6a55c961 // indirect
+	github.com/golang/protobuf v1.3.0 // indirect
+	github.com/golang/snappy v0.0.1 // indirect
+	github.com/google/pprof v0.0.0-20190228041337-2ef8d84b2e3c // indirect
 	github.com/googleapis/gax-go v2.0.2+incompatible // indirect
-	github.com/gregjones/httpcache v0.0.0-20190203031600-7a902570cb17 // indirect
+	github.com/gravitational/trace v0.0.0-20190218181455-5d6afe38af2b // indirect
+	github.com/gregjones/httpcache v0.0.0-20190212212710-3befbb6ad0cc // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.7.0 // indirect
 	github.com/hashicorp/go-multierror v1.0.0
+	github.com/kisielk/errcheck v1.2.0 // indirect
+	github.com/kisielk/gotool v1.0.0 // indirect
+	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.2 // indirect
 	github.com/openzipkin/zipkin-go v0.1.5 // indirect
-	github.com/orange-cloudfoundry/gobis v1.1.0
+	github.com/orange-cloudfoundry/gobis v1.2.0
 	github.com/orange-cloudfoundry/gobis-middlewares v1.1.1
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/prometheus/client_model v0.0.0-20190129233127-fd36f4220a90 // indirect
 	github.com/prometheus/common v0.2.0 // indirect
-	github.com/prometheus/procfs v0.0.0-20190209105433-f8d8b3f739bd // indirect
+	github.com/prometheus/procfs v0.0.0-20190227231451-bbced9601137 // indirect
 	github.com/russross/blackfriday v2.0.0+incompatible // indirect
 	github.com/shurcooL/go v0.0.0-20190121191506-3fef8c783dec // indirect
 	github.com/shurcooL/gofontwoff v0.0.0-20181114050219-180f79e6909d // indirect
@@ -45,17 +54,18 @@ require (
 	github.com/stretchr/testify v1.3.0 // indirect
 	github.com/urfave/cli v1.20.0
 	go.opencensus.io v0.19.0 // indirect
-	go4.org v0.0.0-20181109185143-00e24f1b2599 // indirect
-	golang.org/x/build v0.0.0-20190208213738-77d92a99a537 // indirect
-	golang.org/x/crypto v0.0.0-20190208162236-193df9c0f06f
-	golang.org/x/exp v0.0.0-20190125153040-c74c464bbbf2 // indirect
-	golang.org/x/net v0.0.0-20190206173232-65e2d4e15006 // indirect
+	go4.org v0.0.0-20190218023631-ce4c26f7be8e // indirect
+	golang.org/x/build v0.0.0-20190228235325-77b8b6b559a9 // indirect
+	golang.org/x/crypto v0.0.0-20190228161510-8dd112bcdc25
+	golang.org/x/exp v0.0.0-20190221220918-438050ddec5e // indirect
+	golang.org/x/net v0.0.0-20190228165749-92fc7df08ae7 // indirect
+	golang.org/x/oauth2 v0.0.0-20190226205417-e64efc72b421 // indirect
 	golang.org/x/perf v0.0.0-20190124201629-844a5f5b46f4 // indirect
-	golang.org/x/sys v0.0.0-20190209173611-3b5209105503 // indirect
-	golang.org/x/tools v0.0.0-20190208222737-3744606dbb67 // indirect
-	google.golang.org/grpc v1.18.0 // indirect
+	golang.org/x/sys v0.0.0-20190228124157-a34e9553db1e // indirect
+	golang.org/x/tools v0.0.0-20190228203856-589c23e65e65 // indirect
+	google.golang.org/genproto v0.0.0-20190227213309-4f5b463f9597 // indirect
 	gopkg.in/yaml.v2 v2.2.2
-	honnef.co/go/tools v0.0.0-20190128043916-71123fcbb8fe // indirect
+	honnef.co/go/tools v0.0.0-20190215041234-466a0476246c // indirect
 	launchpad.net/gocheck v0.0.0-20140225173054-000000000087 // indirect
 	sourcegraph.com/sqs/pbtypes v1.0.0 // indirect
 )
