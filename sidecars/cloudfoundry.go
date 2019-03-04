@@ -58,7 +58,7 @@ func (s CFSidecar) Setup(config *server.GobisServerConfig, appPort int) error {
 	route.MiddlewareParams = params
 	entry.Debug("Finished loading params files...")
 	config.Routes = []gobis.ProxyRoute{route}
-	log.Infof("Real app is listening on port '%s' , you can use internal domain to bypass gobis", appPort)
+	log.Infof("Real app is listening on port '%d' , you can use internal domain to bypass gobis", appPort)
 	return nil
 }
 
