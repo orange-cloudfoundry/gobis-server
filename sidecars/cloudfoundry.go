@@ -10,24 +10,18 @@ import (
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	"os"
-	"os/exec"
 	"path/filepath"
-	"runtime"
-	"strings"
 )
 
 const (
-	launcherName string = "launcher"
-	routeFile    string = "route.yml"
-	procFile     string = "Procfile"
-	gobisFolder  string = ".gobis"
+	routeFile   string = "route.yml"
+	gobisFolder string = ".gobis"
 )
 
 type CFSidecar struct {
 }
 
-func (s CFSidecar) Run(config *server.GobisServerConfig) error {
+func (s CFSidecar) Setup(config *server.GobisServerConfig, appPort int) error {
 	entry := log.WithField("sidecar", s.CloudEnvName())
 
 	appInfo := gautocloud.GetAppInfo()
@@ -47,8 +41,7 @@ func (s CFSidecar) Run(config *server.GobisServerConfig) error {
 	}
 	route.Name = "proxy-" + appInfo.Name
 	route.Path = gobis.NewPathMatcher("/**")
-	appPort := os.Getenv("GOBIS_PORT")
-	route.Url = fmt.Sprintf("http://127.0.0.1:%s", appPort)
+	route.Url = fmt.Sprintf("http://127.0.0.1:%d", appPort)
 	entry.Debug("Finished loading route ...")
 
 	entry.Debug("Loading params files...")
@@ -64,24 +57,7 @@ func (s CFSidecar) Run(config *server.GobisServerConfig) error {
 	}
 	route.MiddlewareParams = params
 	entry.Debug("Finished loading params files...")
-
 	config.Routes = []gobis.ProxyRoute{route}
-
-	entry.Debug("Executing launcher to start real process ...")
-	lPath := s.launcherPath()
-	wd, _ := os.Getwd()
-	cmd := exec.Command(lPath, wd, s.getUserStartCommand(), "")
-	cmd.Env = s.appEnv(appPort)
-	cmd.Dir = filepath.Dir(wd)
-
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	err = cmd.Start()
-	if err != nil {
-		return err
-	}
-	entry.Debug("Finished executing launcher to start real process.")
-
 	log.Infof("Real app is listening on port '%s' , you can use internal domain to bypass gobis", appPort)
 	return nil
 }
@@ -125,55 +101,6 @@ func (CFSidecar) loadingRouteParams() (map[string]interface{}, error) {
 		params = mergeMap(params, newParams)
 	}
 	return params, result
-}
-
-func (CFSidecar) appEnv(port string) []string {
-	envv := os.Environ()
-	hasPort := false
-	for i := 0; i < len(envv); i++ {
-		if strings.HasPrefix(envv[i], "VCAP_APP_PORT=") {
-			envv[i] = fmt.Sprintf("VCAP_APP_PORT=%s", port)
-		}
-		if strings.HasPrefix(envv[i], "PORT=") {
-			envv[i] = fmt.Sprintf("PORT=%s", port)
-			hasPort = true
-		}
-	}
-	if !hasPort {
-		envv = append(envv, fmt.Sprintf("PORT=%s", port))
-	}
-	return envv
-}
-
-func (CFSidecar) getUserStartCommand() string {
-	b, err := ioutil.ReadFile(procFile)
-	if err != nil {
-		return ""
-	}
-	startCommandS := struct {
-		StartCommand string `yaml:"start"`
-	}{}
-	err = yaml.Unmarshal(b, &startCommandS)
-	if err != nil {
-		return ""
-	}
-	return startCommandS.StartCommand
-}
-
-func (CFSidecar) launcherPath() string {
-	lName := launcherName
-	base := "/tmp"
-	if runtime.GOOS == "windows" {
-		base = "C:\\tmp"
-		lName += ".exe"
-	}
-	path := filepath.Join(base, "lifecycle", lName)
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		wd, _ := os.Getwd()
-		return filepath.Join(wd, lName)
-	}
-
-	return path
 }
 
 func (CFSidecar) CloudEnvName() string {

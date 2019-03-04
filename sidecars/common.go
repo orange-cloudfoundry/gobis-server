@@ -8,7 +8,7 @@ import (
 )
 
 type Sidecar interface {
-	Run(*server.GobisServerConfig) error
+	Setup(c *server.GobisServerConfig, appPort int) error
 	CloudEnvName() string
 }
 
