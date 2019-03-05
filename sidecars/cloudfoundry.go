@@ -2,6 +2,7 @@ package sidecars
 
 import (
 	"fmt"
+	"github.com/cloudfoundry-community/gautocloud"
 	"github.com/cloudfoundry-community/gautocloud/cloudenv"
 	"github.com/hashicorp/go-multierror"
 	"github.com/orange-cloudfoundry/gobis"
@@ -22,6 +23,8 @@ type CFSidecar struct {
 
 func (s CFSidecar) Setup(config *server.GobisServerConfig, appPort int) error {
 	entry := log.WithField("sidecar", s.CloudEnvName())
+
+	appInfo := gautocloud.GetAppInfo()
 	config.Cert = ""
 	config.Host = ""
 	config.LetsEncryptDomains = []string{}
