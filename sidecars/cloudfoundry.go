@@ -2,7 +2,6 @@ package sidecars
 
 import (
 	"fmt"
-	"github.com/cloudfoundry-community/gautocloud"
 	"github.com/cloudfoundry-community/gautocloud/cloudenv"
 	"github.com/hashicorp/go-multierror"
 	"github.com/orange-cloudfoundry/gobis"
@@ -23,8 +22,6 @@ type CFSidecar struct {
 
 func (s CFSidecar) Setup(config *server.GobisServerConfig, appPort int) error {
 	entry := log.WithField("sidecar", s.CloudEnvName())
-
-	appInfo := gautocloud.GetAppInfo()
 	config.Cert = ""
 	config.Host = ""
 	config.LetsEncryptDomains = []string{}
@@ -53,7 +50,7 @@ func (s CFSidecar) Setup(config *server.GobisServerConfig, appPort int) error {
 		)
 	}
 	if route.MiddlewareParams != nil {
-		params = mergeMap(params, route.MiddlewareParams.(map[string]interface{}))
+		params = mergeMap(params, mapInterfaceToString(route.MiddlewareParams.(map[interface{}]interface{})))
 	}
 	route.MiddlewareParams = params
 	entry.Debug("Finished loading params files...")
@@ -69,7 +66,7 @@ func (CFSidecar) loadingRouteConfig() (gobis.ProxyRoute, error) {
 		return route, err
 	}
 	if err == nil {
-		err = yaml.Unmarshal(b, route)
+		err = yaml.Unmarshal(b, &route)
 		if err != nil {
 			return route, err
 		}
