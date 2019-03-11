@@ -66,11 +66,7 @@ func NewApp(version string) *GobisServerApp {
 		},
 		cli.BoolFlag{
 			Name:  "sidecar, s",
-			Usage: "Run server as a sidecar, you can use sidecar-env to force sidecar env detection",
-		},
-		cli.StringFlag{
-			Name:  "sidecar-env",
-			Usage: "Must be use with --sidecar, this permit to force sidecar env detection",
+			Usage: "Run server as a sidecar",
 		},
 		cli.IntFlag{
 			Name:   "sidecar-app-port",
@@ -95,18 +91,13 @@ func (a *GobisServerApp) Run(arguments []string) (err error) {
 	return a.App.Run(arguments)
 }
 
-func (a *GobisServerApp) loadSidecar(config *server.GobisServerConfig, sidecarEnv string, appPort int) error {
-	if sidecarEnv == "" {
-		sidecarEnv = gautocloud.CurrentCloudEnv().Name()
+func (a *GobisServerApp) loadSidecar(config *server.GobisServerConfig, appPort int) error {
+	log.Info("Loading sidecar setup ...")
+	err := sidecars.Setup(config, appPort)
+	if err != nil {
+		return err
 	}
-	log.Info("Loading sidecar ...")
-	for _, sidecar := range sidecars.Retrieve() {
-		if sidecar.CloudEnvName() == sidecarEnv {
-			log.Infof("Sidecar for %s is loading", sidecar.CloudEnvName())
-			return sidecar.Setup(config, appPort)
-		}
-	}
-	log.Warnf("No sidecar has been found for %s environment", sidecarEnv)
+	log.Info("Finished loading sidecar setup.")
 	return nil
 }
 
@@ -136,7 +127,7 @@ func (a *GobisServerApp) RunServer(c *cli.Context) error {
 	}
 	loadLogConfig(config)
 	if c.GlobalBool("sidecar") {
-		err = a.loadSidecar(config, c.GlobalString("sidecar-env"), c.GlobalInt("sidecar-app-port"))
+		err = a.loadSidecar(config, c.GlobalInt("sidecar-app-port"))
 		if err != nil {
 			return err
 		}

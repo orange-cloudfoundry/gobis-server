@@ -2,16 +2,10 @@ package sidecars
 
 import (
 	"fmt"
-	"github.com/orange-cloudfoundry/gobis-server/server"
 	"net"
 	"os"
 	"strconv"
 )
-
-type Sidecar interface {
-	Setup(c *server.GobisServerConfig, appPort int) error
-	CloudEnvName() string
-}
 
 func generatePort(minport int, maxport int) int {
 	port := minport
@@ -43,11 +37,6 @@ func isPortAvailable(num int) bool {
 	return true
 }
 
-func Retrieve() []Sidecar {
-	return []Sidecar{
-		CFSidecar{},
-	}
-}
 
 func mergeMap(old, new map[string]interface{}) map[string]interface{} {
 	for k, v := range new {

@@ -44,8 +44,8 @@ GLOBAL OPTIONS:
    --key value                                Path to a key file or a key content to enable https server (default: "server.key")
    --log-level value, -l value                Log level to use
    --log-json, -j                             Write log in json
-   --sidecar, -s                              Run server as a sidecar, you can use sidecar-env to force sidecar env detection
-   --sidecar-env value                        Must be use with --sidecar, this permit to force sidecar env detection
+   --sidecar, -s                              Run server as a sidecar
+   --sidecar-app-port value                   Set port where real app is listening when running in sidecar (default: 8081) [$PROXY_APP_PORT]
    --no-color                                 Logger will not display colors
    --lets-encrypt-domains value, --led value  If set server will use a certificate generated with let's encrypt, value should be your domain(s) (e.g.: --lets-encrypt=example.com[,seconddomain.com]). Host and port will be overwritten to use 0.0.0.0:443
    --help, -h                                 show help
@@ -200,33 +200,5 @@ Sidecar intentionally force to have one route and redirect everything to app bes
 To do so simply run with `--sidecar` argument, this will auto-detect your environment.
 You can chose yourself environment by using argument `--sidecar-env`
 
-Supported environment:
-- `cloudfoundry`
+See [sidecars-buildpack](https://github.com/orange-cloudfoundry/sidecars-buildpack) for usage on a cloud supporting buildpacks.
 
-## Cloud Foundry
-Cloud Foundry sidecar expect to be loaded in his own [buildpack](https://github.com/orange-cloudfoundry/gobis-buildpack). We will explain here only lifecycle.
-
-Sidecar expect to find `route.yml` file in working directory with 
-this content for one route and `url`, `name` and `path` can be omitted (it will override if set), e.g.:
-
-```yaml
-insecure_skip_verify: false
-show_error: false
-middleware_params:
-  cors:
-    max_age: 12
-    allowed_origins:
-    - http://localhost
-```
-
-Gobis-server config can be set with normal config file.
-
-Sidecar will do the following:
-1. Load `.gobis/route.yml` file and add only this route to gobis (`name` will be configured as `proxy-<app-name>` and `path` will be `/**`)
-2. Look for all files named as follow `.gobis/*-params.yml` and load them as middleware params to be injected in route.
-3. Get from env var `GOBIS_PORT` to know where app should listen
-4. Create route url to `http://127.0.0.1:<previous found port>`
-5. Look in `Procfile` if key `start` is found. Content is the custom command for real app that user want to override
-6. Run default launcher from cloud foundry with start command given by user if exists 
-to start real app with `PORT` env var override to previous found port 
-7. Gobis-server will listening on port expected by cloud foundry and will reverse traffic to app beside

@@ -3,7 +3,6 @@ package sidecars
 import (
 	"fmt"
 	"github.com/cloudfoundry-community/gautocloud"
-	"github.com/cloudfoundry-community/gautocloud/cloudenv"
 	"github.com/hashicorp/go-multierror"
 	"github.com/orange-cloudfoundry/gobis"
 	"github.com/orange-cloudfoundry/gobis-server/server"
@@ -18,11 +17,8 @@ const (
 	gobisFolder string = ".gobis"
 )
 
-type CFSidecar struct {
-}
-
-func (s CFSidecar) Setup(config *server.GobisServerConfig, appPort int) error {
-	entry := log.WithField("sidecar", s.CloudEnvName())
+func Setup(config *server.GobisServerConfig, appPort int) error {
+	entry := log.WithField("sidecar", true)
 
 	appInfo := gautocloud.GetAppInfo()
 	config.Cert = ""
@@ -31,7 +27,7 @@ func (s CFSidecar) Setup(config *server.GobisServerConfig, appPort int) error {
 	config.Port = appInfo.Port
 
 	entry.Debug("Loading route config...")
-	route, err := s.loadingRouteConfig()
+	route, err := loadingRouteConfig()
 	if err != nil {
 		entry.Warnf(
 			"Something went wrong when loading %s, so it use only default configuration, see details: %s",
@@ -45,7 +41,7 @@ func (s CFSidecar) Setup(config *server.GobisServerConfig, appPort int) error {
 	entry.Debug("Finished loading route ...")
 
 	entry.Debug("Loading params files...")
-	params, err := s.loadingRouteParams()
+	params, err := loadingRouteParams()
 	if err != nil {
 		entry.Warnf(
 			"Something went wrong when loading params files: %s",
@@ -62,7 +58,7 @@ func (s CFSidecar) Setup(config *server.GobisServerConfig, appPort int) error {
 	return nil
 }
 
-func (CFSidecar) loadingRouteConfig() (gobis.ProxyRoute, error) {
+func loadingRouteConfig() (gobis.ProxyRoute, error) {
 	var route gobis.ProxyRoute
 	b, err := ioutil.ReadFile(filepath.Join(gobisFolder, routeFile))
 	if err != nil {
@@ -77,7 +73,7 @@ func (CFSidecar) loadingRouteConfig() (gobis.ProxyRoute, error) {
 	return route, nil
 }
 
-func (CFSidecar) loadingRouteParams() (map[string]interface{}, error) {
+func loadingRouteParams() (map[string]interface{}, error) {
 	params := make(map[string]interface{})
 	var files []string
 	var err error
@@ -101,8 +97,4 @@ func (CFSidecar) loadingRouteParams() (map[string]interface{}, error) {
 		params = mergeMap(params, newParams)
 	}
 	return params, result
-}
-
-func (CFSidecar) CloudEnvName() string {
-	return cloudenv.CfCloudEnv{}.Name()
 }
