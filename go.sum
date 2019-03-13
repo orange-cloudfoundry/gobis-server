@@ -227,6 +227,8 @@ github.com/orange-cloudfoundry/gobis v1.2.0 h1:O0dv1z46bpMjO1NImtbV3Dr9lEF+cZPn5
 github.com/orange-cloudfoundry/gobis v1.2.0/go.mod h1:Tm62sdH3t/oi0Ds0OqsMesqVNrK5wNU5k5hvlht+rMs=
 github.com/orange-cloudfoundry/gobis v1.3.0 h1:lcn7Qc7zDiczsQRjlFT97ARtqvmEIoQr+mJcmt9iniM=
 github.com/orange-cloudfoundry/gobis v1.3.0/go.mod h1:Tm62sdH3t/oi0Ds0OqsMesqVNrK5wNU5k5hvlht+rMs=
+github.com/orange-cloudfoundry/gobis v1.3.1 h1:sQq5xd9PgRb4fcXeIqOyij/Ea/e50l9LNC/Ltv0PPkc=
+github.com/orange-cloudfoundry/gobis v1.3.1/go.mod h1:Tm62sdH3t/oi0Ds0OqsMesqVNrK5wNU5k5hvlht+rMs=
 github.com/orange-cloudfoundry/gobis-middlewares v1.1.0 h1:/m6uKXAGYrQOrpXeOLKlIbmErqeYTeCIJHwdYJHWKC8=
 github.com/orange-cloudfoundry/gobis-middlewares v1.1.0/go.mod h1:0tQlw+QEcbwHDe7IWSJuY1unFKCcnwJBp5StpINEm50=
 github.com/orange-cloudfoundry/gobis-middlewares v1.1.1 h1:qryDZ0ZRuxwiOStCeH43nvmr3S5bzidpuODSK5rUI10=
