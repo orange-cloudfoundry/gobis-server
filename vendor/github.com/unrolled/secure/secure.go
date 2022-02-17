@@ -27,6 +27,7 @@ const (
 	featurePolicyHeader     = "Feature-Policy"
 	permissionsPolicyHeader = "Permissions-Policy"
 	expectCTHeader          = "Expect-CT"
+	coopHeader              = "Cross-Origin-Opener-Policy"
 
 	ctxDefaultSecureHeaderKey = secureCtxKey("SecureResponseHeader")
 	cspNonceSize              = 16
@@ -42,7 +43,7 @@ func defaultBadHostHandler(w http.ResponseWriter, r *http.Request) {
 // Options is a struct for specifying configuration options for the secure.Secure middleware.
 type Options struct {
 	// If BrowserXssFilter is true, adds the X-XSS-Protection header with the value `1; mode=block`. Default is false.
-	BrowserXssFilter bool // nolint: golint
+	BrowserXssFilter bool //nolint:stylecheck
 	// If ContentTypeNosniff is true, adds the X-Content-Type-Options header with the value `nosniff`. Default is false.
 	ContentTypeNosniff bool
 	// If ForceSTSHeader is set to true, the STS header will be added even when the connection is HTTP. Default is false.
@@ -69,7 +70,7 @@ type Options struct {
 	// ContentSecurityPolicyReportOnly allows the Content-Security-Policy-Report-Only header value to be set with a custom value. Default is "".
 	ContentSecurityPolicyReportOnly string
 	// CustomBrowserXssValue allows the X-XSS-Protection header value to be set with a custom value. This overrides the BrowserXssFilter option. Default is "".
-	CustomBrowserXssValue string // nolint: golint
+	CustomBrowserXssValue string //nolint:stylecheck
 	// Passing a template string will replace `$NONCE` with a dynamic nonce value of 16 bytes for each request which can be later retrieved using the Nonce function.
 	// Eg: script-src $NONCE -> script-src 'nonce-a2ZobGFoZg=='
 	// CustomFrameOptionsValue allows the X-Frame-Options header value to be set with a custom value. This overrides the FrameDeny option. Default is "".
@@ -84,6 +85,9 @@ type Options struct {
 	FeaturePolicy string
 	// PermissionsPolicy allows to selectively enable and disable use of various browser features and APIs. Default is "".
 	PermissionsPolicy string
+	// CrossOriginOpenerPolicy allows you to ensure a top-level document does not share a browsing context group with cross-origin documents. Default is "".
+	// Reference: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy
+	CrossOriginOpenerPolicy string
 	// SSLHost is the host name that is used to redirect http requests to https. Default is "", which indicates to use the same host.
 	SSLHost string
 	// AllowedHosts is a list of fully qualified domain names that are allowed. Default is empty list, which allows any and all host names.
@@ -132,8 +136,8 @@ func New(options ...Options) *Secure {
 		o = options[0]
 	}
 
-	o.ContentSecurityPolicy = strings.Replace(o.ContentSecurityPolicy, "$NONCE", "'nonce-%[1]s'", -1)
-	o.ContentSecurityPolicyReportOnly = strings.Replace(o.ContentSecurityPolicyReportOnly, "$NONCE", "'nonce-%[1]s'", -1)
+	o.ContentSecurityPolicy = strings.ReplaceAll(o.ContentSecurityPolicy, "$NONCE", "'nonce-%[1]s'")
+	o.ContentSecurityPolicyReportOnly = strings.ReplaceAll(o.ContentSecurityPolicyReportOnly, "$NONCE", "'nonce-%[1]s'")
 
 	o.nonceEnabled = strings.Contains(o.ContentSecurityPolicy, "%[1]s") || strings.Contains(o.ContentSecurityPolicyReportOnly, "%[1]s")
 
@@ -433,6 +437,11 @@ func (s *Secure) processRequest(w http.ResponseWriter, r *http.Request) (http.He
 	// Permissions Policy header.
 	if len(s.opt.PermissionsPolicy) > 0 {
 		responseHeader.Set(permissionsPolicyHeader, s.opt.PermissionsPolicy)
+	}
+
+	// Cross Origin Opener Policy header.
+	if len(s.opt.CrossOriginOpenerPolicy) > 0 {
+		responseHeader.Set(coopHeader, s.opt.CrossOriginOpenerPolicy)
 	}
 
 	// Expect-CT header.
