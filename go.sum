@@ -222,8 +222,8 @@ github.com/mailgun/ttlmap v0.0.0-20170619185759-c1c17f74874f h1:ZZYhg16XocqSKPGN
 github.com/mailgun/ttlmap v0.0.0-20170619185759-c1c17f74874f/go.mod h1:8heskWJ5c0v5J9WH89ADhyal1DOZcayll8fSbhB+/9A=
 github.com/mitchellh/mapstructure v1.1.2/go.mod h1:FVVH3fgwuzCH5S8UJGiWEs2h04kUh9fWfEaFds41c1Y=
 github.com/mitchellh/mapstructure v1.4.2/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
-github.com/mitchellh/mapstructure v1.4.3 h1:OVowDSCllw/YjdLkam3/sm7wEtOy59d8ndGgCcyj8cs=
-github.com/mitchellh/mapstructure v1.4.3/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
+github.com/mitchellh/mapstructure v1.5.0 h1:jeMsZIYE/09sWLaz43PL7Gy6RuMjD2eJVyuac5Z2hdY=
+github.com/mitchellh/mapstructure v1.5.0/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e h1:fD57ERR4JtEqsWbfPhv4DMiApHyliiK5xCTNVSPiaAs=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/nxadm/tail v1.4.4/go.mod h1:kenIhsEOeOJmVchQTgglprH7qJGnHDVpk1VPCcaMI8A=
@@ -244,8 +244,8 @@ github.com/onsi/gomega v1.13.0/go.mod h1:lRk9szgn8TxENtWd0Tp4c3wjlRfMTMH27I+3Je4
 github.com/onsi/gomega v1.19.0 h1:4ieX6qQjPP/BfC3mpsAtIGGlxTWPeA3Inl/7DtXw1tw=
 github.com/orange-cloudfoundry/go-auth-pubtkt v1.0.3 h1:ZJb4K/6jomhmbSVjEN8sKSMXt99v6dUIW0tlMg3Q+Ck=
 github.com/orange-cloudfoundry/go-auth-pubtkt v1.0.3/go.mod h1:Hx1cPjYq6feLBcQ7LiYB0eu/femb52Bn+MyZe1mnqh4=
-github.com/orange-cloudfoundry/gobis v1.9.0 h1:wwRQe3HIc2WzH67iAn3JtwwuuCwE8SnrBsh7D0xsMVo=
-github.com/orange-cloudfoundry/gobis v1.9.0/go.mod h1:51nYUrcIKhFF7MuJ5li254RjwIKIlrb5lD0foZPZfGQ=
+github.com/orange-cloudfoundry/gobis v1.10.0 h1:E8uYMX/qLodcXRXl3NkGvvvSxrDUQkbTJQpjZ1ZdxuI=
+github.com/orange-cloudfoundry/gobis v1.10.0/go.mod h1:hxO2LCAi1nIh0fTkzwB7q5FNUa13qXNTam/yx3K5RSM=
 github.com/orange-cloudfoundry/gobis-middlewares v1.10.0 h1:ttZ97n/bR1ry4kjfXFnJWf5IrQXXA/J7aul7tsw+qe8=
 github.com/orange-cloudfoundry/gobis-middlewares v1.10.0/go.mod h1:EkDRK3kPgCyCgJlDQgIh8wR39Um8BXHtOL0EOvmYEB0=
 github.com/pelletier/go-toml v1.9.4 h1:tjENF6MfZAg8e4ZmZTeWaWiT2vXtsoO6+iuOjFhECwM=

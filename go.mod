@@ -6,7 +6,7 @@ require (
 	github.com/cloudfoundry-community/gautocloud v1.1.9
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/orange-cloudfoundry/gobis v1.9.0
+	github.com/orange-cloudfoundry/gobis v1.10.0
 	github.com/orange-cloudfoundry/gobis-middlewares v1.10.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/urfave/cli v1.22.6
@@ -43,7 +43,7 @@ require (
 	github.com/mailgun/multibuf v0.0.0-20150714184110-565402cd71fb // indirect
 	github.com/mailgun/timetools v0.0.0-20170619190023-f3a7b8ffff47 // indirect
 	github.com/mailgun/ttlmap v0.0.0-20170619185759-c1c17f74874f // indirect
-	github.com/mitchellh/mapstructure v1.4.3 // indirect
+	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/orange-cloudfoundry/go-auth-pubtkt v1.0.3 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
