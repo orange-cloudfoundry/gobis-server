@@ -213,7 +213,7 @@ github.com/thoas/go-funk
 # github.com/unrolled/secure v1.10.0
 ## explicit; go 1.13
 github.com/unrolled/secure
-# github.com/urfave/cli v1.22.5
+# github.com/urfave/cli v1.22.6
 ## explicit; go 1.11
 github.com/urfave/cli
 # github.com/vulcand/oxy v1.3.0
