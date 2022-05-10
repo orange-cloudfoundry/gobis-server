@@ -6,22 +6,22 @@ require (
 	github.com/cloudfoundry-community/gautocloud v1.1.9
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/orange-cloudfoundry/gobis v1.10.0
+	github.com/orange-cloudfoundry/gobis v1.11.0
 	github.com/orange-cloudfoundry/gobis-middlewares v1.11.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/urfave/cli v1.22.9
-	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
+	golang.org/x/crypto v0.0.0-20220427172511-eb4f295cb31f
 	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
 	github.com/ArthurHlt/logrus-cef-formatter v1.0.0 // indirect
+	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
 	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible // indirect
 	github.com/auth0/go-jwt-middleware v1.0.1 // indirect
 	github.com/azer/snakecase v1.0.0 // indirect
 	github.com/casbin/casbin v1.9.1 // indirect
 	github.com/cloudfoundry-community/go-cfenv v1.18.0 // indirect
-	github.com/codahale/hdrhistogram v1.1.2 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/form3tech-oss/jwt-go v3.2.5+incompatible // indirect
@@ -37,14 +37,9 @@ require (
 	github.com/gravitational/trace v1.1.18 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jonboulle/clockwork v0.2.3 // indirect
-	github.com/kr/text v0.2.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
-	github.com/mailgun/minheap v0.0.0-20170619185613-3dbe6c6bf55f // indirect
 	github.com/mailgun/multibuf v0.0.0-20150714184110-565402cd71fb // indirect
-	github.com/mailgun/timetools v0.0.0-20170619190023-f3a7b8ffff47 // indirect
-	github.com/mailgun/ttlmap v0.0.0-20170619185759-c1c17f74874f // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
-	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/orange-cloudfoundry/go-auth-pubtkt v1.0.3 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.0-beta.8 // indirect
@@ -59,9 +54,9 @@ require (
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/thoas/go-funk v0.9.2 // indirect
 	github.com/unrolled/secure v1.10.0 // indirect
-	github.com/vulcand/oxy v1.3.0 // indirect
+	github.com/vulcand/oxy v1.4.0 // indirect
 	github.com/vulcand/predicate v1.2.0 // indirect
-	golang.org/x/net v0.0.0-20220412020605-290c469a71a5 // indirect
+	golang.org/x/net v0.0.0-20220425223048-2871e0cb64e4 // indirect
 	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5 // indirect
 	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad // indirect
 	golang.org/x/term v0.0.0-20220411215600-e5f449aeb171 // indirect
@@ -69,10 +64,8 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/asn1-ber.v1 v1.0.0-20181015200546-f715ec2f112d // indirect
-	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/ini.v1 v1.66.4 // indirect
 	gopkg.in/ldap.v2 v2.5.1 // indirect
-	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
 
