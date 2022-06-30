@@ -1,9 +1,6 @@
 # github.com/ArthurHlt/logrus-cef-formatter v1.0.0
 ## explicit
 github.com/ArthurHlt/logrus-cef-formatter
-# github.com/HdrHistogram/hdrhistogram-go v1.1.2
-## explicit; go 1.14
-github.com/HdrHistogram/hdrhistogram-go
 # github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible
 ## explicit
 github.com/Knetic/govaluate
@@ -26,8 +23,8 @@ github.com/casbin/casbin/persist/file-adapter
 github.com/casbin/casbin/rbac
 github.com/casbin/casbin/rbac/default-role-manager
 github.com/casbin/casbin/util
-# github.com/cloudfoundry-community/gautocloud v1.1.10
-## explicit; go 1.18
+# github.com/cloudfoundry-community/gautocloud v1.1.7
+## explicit; go 1.14
 github.com/cloudfoundry-community/gautocloud
 github.com/cloudfoundry-community/gautocloud/cloudenv
 github.com/cloudfoundry-community/gautocloud/connectors
@@ -42,6 +39,9 @@ github.com/cloudfoundry-community/gautocloud/utils
 # github.com/cloudfoundry-community/go-cfenv v1.18.0
 ## explicit; go 1.11
 github.com/cloudfoundry-community/go-cfenv
+# github.com/codahale/hdrhistogram v1.1.0 => github.com/HdrHistogram/hdrhistogram-go v0.9.0
+## explicit
+github.com/codahale/hdrhistogram
 # github.com/cpuguy83/go-md2man/v2 v2.0.2
 ## explicit; go 1.11
 github.com/cpuguy83/go-md2man/v2/md2man
@@ -85,7 +85,7 @@ github.com/gorilla/sessions
 # github.com/gorilla/websocket v1.5.0
 ## explicit; go 1.12
 github.com/gorilla/websocket
-# github.com/gravitational/trace v1.1.19
+# github.com/gravitational/trace v1.1.16-0.20220114165159-14a9a7dd6aaf
 ## explicit; go 1.15
 github.com/gravitational/trace
 github.com/gravitational/trace/internal
@@ -113,20 +113,29 @@ github.com/jonboulle/clockwork
 # github.com/magiconair/properties v1.8.6
 ## explicit; go 1.13
 github.com/magiconair/properties
+# github.com/mailgun/minheap v0.0.0-20170619185613-3dbe6c6bf55f
+## explicit
+github.com/mailgun/minheap
 # github.com/mailgun/multibuf v0.1.2
 ## explicit; go 1.17
 github.com/mailgun/multibuf
+# github.com/mailgun/timetools v0.0.0-20170619190023-f3a7b8ffff47
+## explicit
+github.com/mailgun/timetools
+# github.com/mailgun/ttlmap v0.0.0-20170619185759-c1c17f74874f
+## explicit
+github.com/mailgun/ttlmap
 # github.com/mitchellh/mapstructure v1.5.0
 ## explicit; go 1.14
 github.com/mitchellh/mapstructure
-# github.com/orange-cloudfoundry/go-auth-pubtkt v1.0.3
+# github.com/orange-cloudfoundry/go-auth-pubtkt v1.0.2
 ## explicit; go 1.12
 github.com/orange-cloudfoundry/go-auth-pubtkt
-# github.com/orange-cloudfoundry/gobis v1.11.2
-## explicit; go 1.18
+# github.com/orange-cloudfoundry/gobis v1.8.0
+## explicit; go 1.17
 github.com/orange-cloudfoundry/gobis
-# github.com/orange-cloudfoundry/gobis-middlewares v1.12.2
-## explicit; go 1.18
+# github.com/orange-cloudfoundry/gobis-middlewares v1.3.3
+## explicit; go 1.16
 github.com/orange-cloudfoundry/gobis-middlewares
 github.com/orange-cloudfoundry/gobis-middlewares/authpubtkt
 github.com/orange-cloudfoundry/gobis-middlewares/basic2token
@@ -149,12 +158,6 @@ github.com/orange-cloudfoundry/gobis-middlewares/utils
 # github.com/pelletier/go-toml v1.9.5
 ## explicit; go 1.12
 github.com/pelletier/go-toml
-# github.com/pelletier/go-toml/v2 v2.0.2
-## explicit; go 1.16
-github.com/pelletier/go-toml/v2
-github.com/pelletier/go-toml/v2/internal/ast
-github.com/pelletier/go-toml/v2/internal/danger
-github.com/pelletier/go-toml/v2/internal/tracker
 # github.com/rs/cors v1.8.2
 ## explicit; go 1.13
 github.com/rs/cors
@@ -167,7 +170,7 @@ github.com/satori/go.uuid
 # github.com/sirupsen/logrus v1.8.1
 ## explicit; go 1.13
 github.com/sirupsen/logrus
-# github.com/spf13/afero v1.8.2
+# github.com/spf13/afero v1.6.0
 ## explicit; go 1.13
 github.com/spf13/afero
 github.com/spf13/afero/mem
@@ -180,17 +183,11 @@ github.com/spf13/jwalterweatherman
 # github.com/spf13/pflag v1.0.5
 ## explicit; go 1.12
 github.com/spf13/pflag
-# github.com/spf13/viper v1.12.0
-## explicit; go 1.17
+# github.com/spf13/viper v1.8.1
+## explicit; go 1.12
 github.com/spf13/viper
-github.com/spf13/viper/internal/encoding
-github.com/spf13/viper/internal/encoding/dotenv
-github.com/spf13/viper/internal/encoding/hcl
-github.com/spf13/viper/internal/encoding/ini
-github.com/spf13/viper/internal/encoding/javaproperties
-github.com/spf13/viper/internal/encoding/json
-github.com/spf13/viper/internal/encoding/toml
-github.com/spf13/viper/internal/encoding/yaml
+# github.com/stretchr/testify v1.7.2
+## explicit; go 1.13
 # github.com/subosito/gotenv v1.4.0
 ## explicit; go 1.18
 github.com/subosito/gotenv
@@ -203,14 +200,12 @@ github.com/unrolled/secure
 # github.com/urfave/cli v1.22.9
 ## explicit; go 1.11
 github.com/urfave/cli
-# github.com/vulcand/oxy v1.4.1
-## explicit; go 1.17
+# github.com/vulcand/oxy v1.3.0
+## explicit; go 1.14
 github.com/vulcand/oxy/buffer
 github.com/vulcand/oxy/cbreaker
 github.com/vulcand/oxy/connlimit
 github.com/vulcand/oxy/forward
-github.com/vulcand/oxy/internal/holsterv4/clock
-github.com/vulcand/oxy/internal/holsterv4/collections
 github.com/vulcand/oxy/memmetrics
 github.com/vulcand/oxy/ratelimit
 github.com/vulcand/oxy/trace
@@ -218,7 +213,7 @@ github.com/vulcand/oxy/utils
 # github.com/vulcand/predicate v1.2.0
 ## explicit; go 1.16
 github.com/vulcand/predicate
-# golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d
+# golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97
 ## explicit; go 1.17
 golang.org/x/crypto/acme
 golang.org/x/crypto/acme/autocert
@@ -228,8 +223,9 @@ golang.org/x/crypto/chacha20
 golang.org/x/crypto/curve25519
 golang.org/x/crypto/curve25519/internal/field
 golang.org/x/crypto/ed25519
-golang.org/x/crypto/internal/poly1305
+golang.org/x/crypto/ed25519/internal/edwards25519
 golang.org/x/crypto/internal/subtle
+golang.org/x/crypto/poly1305
 golang.org/x/crypto/ssh
 golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
 golang.org/x/crypto/ssh/terminal
@@ -306,10 +302,11 @@ gopkg.in/ini.v1
 # gopkg.in/ldap.v2 v2.5.1
 ## explicit
 gopkg.in/ldap.v2
+# gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
+## explicit
+gopkg.in/mgo.v2/bson
+gopkg.in/mgo.v2/internal/json
 # gopkg.in/yaml.v2 v2.4.0
 ## explicit; go 1.15
 gopkg.in/yaml.v2
-# gopkg.in/yaml.v3 v3.0.1
-## explicit
-gopkg.in/yaml.v3
 # github.com/codahale/hdrhistogram => github.com/HdrHistogram/hdrhistogram-go v0.9.0

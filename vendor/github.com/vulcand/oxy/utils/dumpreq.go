@@ -9,12 +9,8 @@ import (
 	"net/url"
 )
 
-// SerializableHttpRequest alias on SerializableHTTPRequest.
-// Deprecated: use SerializableHTTPRequest instead.
-type SerializableHttpRequest = SerializableHTTPRequest
-
-// SerializableHTTPRequest serializable HTTP request.
-type SerializableHTTPRequest struct {
+// SerializableHttpRequest serializable HTTP request
+type SerializableHttpRequest struct {
 	Method           string
 	URL              *url.URL
 	Proto            string // "HTTP/1.0"
@@ -33,13 +29,13 @@ type SerializableHTTPRequest struct {
 	TLS              *tls.ConnectionState
 }
 
-// Clone clone a request.
-func Clone(r *http.Request) *SerializableHTTPRequest {
+// Clone clone a request
+func Clone(r *http.Request) *SerializableHttpRequest {
 	if r == nil {
 		return nil
 	}
 
-	rc := new(SerializableHTTPRequest)
+	rc := new(SerializableHttpRequest)
 	rc.Method = r.Method
 	rc.URL = r.URL
 	rc.Proto = r.Proto
@@ -53,28 +49,16 @@ func Clone(r *http.Request) *SerializableHTTPRequest {
 	return rc
 }
 
-// ToJson serializes to JSON.
-// Deprecated: use ToJSON instead.
-func (s *SerializableHTTPRequest) ToJson() string {
-	return s.ToJSON()
-}
-
-// ToJSON serializes to JSON.
-func (s *SerializableHTTPRequest) ToJSON() string {
+// ToJson serializes to JSON
+func (s *SerializableHttpRequest) ToJson() string {
 	jsonVal, err := json.Marshal(s)
 	if err != nil || jsonVal == nil {
-		return fmt.Sprintf("Error marshalling SerializableHTTPRequest to json: %s", err)
+		return fmt.Sprintf("Error marshalling SerializableHttpRequest to json: %s", err)
 	}
 	return string(jsonVal)
 }
 
-// DumpHttpRequest dump a HTTP request to JSON.
-// Deprecated: use DumpHTTPRequest instead.
+// DumpHttpRequest dump a HTTP request to JSON
 func DumpHttpRequest(req *http.Request) string {
-	return DumpHTTPRequest(req)
-}
-
-// DumpHTTPRequest dump a HTTP request to JSON.
-func DumpHTTPRequest(req *http.Request) string {
-	return Clone(req).ToJSON()
+	return Clone(req).ToJson()
 }

@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/vulcand/oxy/internal/holsterv4/clock"
+	"github.com/mailgun/timetools"
 )
 
 // RTMetrics provides aggregated performance metrics for HTTP requests processing
@@ -24,31 +24,40 @@ type RTMetrics struct {
 
 	newCounter NewCounterFn
 	newHist    NewRollingHistogramFn
+	clock      timetools.TimeProvider
 }
 
 type rrOptSetter func(r *RTMetrics) error
 
-// NewRTMetricsFn builder function type.
+// NewRTMetricsFn builder function type
 type NewRTMetricsFn func() (*RTMetrics, error)
 
-// NewCounterFn builder function type.
+// NewCounterFn builder function type
 type NewCounterFn func() (*RollingCounter, error)
 
-// NewRollingHistogramFn builder function type.
+// NewRollingHistogramFn builder function type
 type NewRollingHistogramFn func() (*RollingHDRHistogram, error)
 
-// RTCounter set a builder function for Counter.
-func RTCounter(fn NewCounterFn) rrOptSetter {
+// RTCounter set a builder function for Counter
+func RTCounter(new NewCounterFn) rrOptSetter {
 	return func(r *RTMetrics) error {
-		r.newCounter = fn
+		r.newCounter = new
 		return nil
 	}
 }
 
-// RTHistogram set a builder function for RollingHistogram.
+// RTHistogram set a builder function for RollingHistogram
 func RTHistogram(fn NewRollingHistogramFn) rrOptSetter {
 	return func(r *RTMetrics) error {
 		r.newHist = fn
+		return nil
+	}
+}
+
+// RTClock sets a clock
+func RTClock(clock timetools.TimeProvider) rrOptSetter {
+	return func(r *RTMetrics) error {
+		r.clock = clock
 		return nil
 	}
 }
@@ -65,15 +74,19 @@ func NewRTMetrics(settings ...rrOptSetter) (*RTMetrics, error) {
 		}
 	}
 
+	if m.clock == nil {
+		m.clock = &timetools.RealTime{}
+	}
+
 	if m.newCounter == nil {
 		m.newCounter = func() (*RollingCounter, error) {
-			return NewCounter(counterBuckets, counterResolution)
+			return NewCounter(counterBuckets, counterResolution, CounterClock(m.clock))
 		}
 	}
 
 	if m.newHist == nil {
 		m.newHist = func() (*RollingHDRHistogram, error) {
-			return NewRollingHDRHistogram(histMin, histMax, histSignificantFigures, histPeriod, histBuckets)
+			return NewRollingHDRHistogram(histMin, histMax, histSignificantFigures, histPeriod, histBuckets, RollingClock(m.clock))
 		}
 	}
 
@@ -98,7 +111,7 @@ func NewRTMetrics(settings ...rrOptSetter) (*RTMetrics, error) {
 	return m, nil
 }
 
-// Export Returns a new RTMetrics which is a copy of the current one.
+// Export Returns a new RTMetrics which is a copy of the current one
 func (m *RTMetrics) Export() *RTMetrics {
 	m.statusCodesLock.RLock()
 	defer m.statusCodesLock.RUnlock()
@@ -120,11 +133,12 @@ func (m *RTMetrics) Export() *RTMetrics {
 	}
 	export.newCounter = m.newCounter
 	export.newHist = m.newHist
+	export.clock = m.clock
 
 	return export
 }
 
-// CounterWindowSize gets total windows size.
+// CounterWindowSize gets total windows size
 func (m *RTMetrics) CounterWindowSize() time.Duration {
 	return m.total.WindowSize()
 }
@@ -138,7 +152,7 @@ func (m *RTMetrics) NetworkErrorRatio() float64 {
 	return float64(m.netErrors.Count()) / float64(m.total.Count())
 }
 
-// ResponseCodeRatio calculates ratio of count(startA to endA) / count(startB to endB).
+// ResponseCodeRatio calculates ratio of count(startA to endA) / count(startB to endB)
 func (m *RTMetrics) ResponseCodeRatio(startA, endA, startB, endB int) float64 {
 	a := int64(0)
 	b := int64(0)
@@ -158,7 +172,7 @@ func (m *RTMetrics) ResponseCodeRatio(startA, endA, startB, endB int) float64 {
 	return 0
 }
 
-// Append append a metric.
+// Append append a metric
 func (m *RTMetrics) Append(other *RTMetrics) error {
 	if m == other {
 		return errors.New("RTMetrics cannot append to self")
@@ -192,14 +206,14 @@ func (m *RTMetrics) Append(other *RTMetrics) error {
 	return m.histogram.Append(copied.histogram)
 }
 
-// Record records a metric.
+// Record records a metric
 func (m *RTMetrics) Record(code int, duration time.Duration) {
 	m.total.Inc(1)
 	if code == http.StatusGatewayTimeout || code == http.StatusBadGateway {
 		m.netErrors.Inc(1)
 	}
-	_ = m.recordStatusCode(code)
-	_ = m.recordLatency(duration)
+	m.recordStatusCode(code)
+	m.recordLatency(duration)
 }
 
 // TotalCount returns total count of processed requests collected.
@@ -207,12 +221,12 @@ func (m *RTMetrics) TotalCount() int64 {
 	return m.total.Count()
 }
 
-// NetworkErrorCount returns total count of processed requests observed.
+// NetworkErrorCount returns total count of processed requests observed
 func (m *RTMetrics) NetworkErrorCount() int64 {
 	return m.netErrors.Count()
 }
 
-// StatusCodesCounts returns map with counts of the response codes.
+// StatusCodesCounts returns map with counts of the response codes
 func (m *RTMetrics) StatusCodesCounts() map[int]int64 {
 	sc := make(map[int]int64)
 	m.statusCodesLock.RLock()
@@ -232,7 +246,7 @@ func (m *RTMetrics) LatencyHistogram() (*HDRHistogram, error) {
 	return m.histogram.Merged()
 }
 
-// Reset reset metrics.
+// Reset reset metrics
 func (m *RTMetrics) Reset() {
 	m.statusCodesLock.Lock()
 	defer m.statusCodesLock.Unlock()
@@ -279,10 +293,10 @@ func (m *RTMetrics) recordStatusCode(statusCode int) error {
 
 const (
 	counterBuckets         = 10
-	counterResolution      = clock.Second
+	counterResolution      = time.Second
 	histMin                = 1
-	histMax                = 3600000000        // 1 hour in microseconds
-	histSignificantFigures = 2                 // significant figures (1% precision)
-	histBuckets            = 6                 // number of sub-histograms in a rolling histogram
-	histPeriod             = 10 * clock.Second // roll time
+	histMax                = 3600000000       // 1 hour in microseconds
+	histSignificantFigures = 2                // significant figures (1% precision)
+	histBuckets            = 6                // number of sub-histograms in a rolling histogram
+	histPeriod             = 10 * time.Second // roll time
 )

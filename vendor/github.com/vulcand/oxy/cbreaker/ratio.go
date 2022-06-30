@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/sirupsen/logrus"
-	"github.com/vulcand/oxy/internal/holsterv4/clock"
+	"github.com/mailgun/timetools"
+	log "github.com/sirupsen/logrus"
 )
 
 // ratioController allows passing portions traffic back to the endpoints,
@@ -15,18 +15,21 @@ import (
 //
 type ratioController struct {
 	duration time.Duration
-	start    clock.Time
+	start    time.Time
+	tm       timetools.TimeProvider
 	allowed  int
 	denied   int
 
-	log *logrus.Logger
+	log *log.Logger
 }
 
-func newRatioController(rampUp time.Duration, log *logrus.Logger) *ratioController {
+func newRatioController(tm timetools.TimeProvider, rampUp time.Duration, log *log.Logger) *ratioController {
 	return &ratioController{
 		duration: rampUp,
-		start:    clock.Now().UTC(),
-		log:      log,
+		tm:       tm,
+		start:    tm.UtcNow(),
+
+		log: log,
 	}
 }
 
@@ -67,5 +70,5 @@ func (r *ratioController) targetRatio() float64 {
 	// after this point to achieve ratio of 1 (that can never be reached unless d is 0)
 	// so we stop from there
 	multiplier := 0.5 / float64(r.duration)
-	return multiplier * float64(clock.Now().UTC().Sub(r.start))
+	return multiplier * float64(r.tm.UtcNow().Sub(r.start))
 }

@@ -55,20 +55,6 @@ func (e *NotFoundError) OrigError() error {
 	return e
 }
 
-// Is provides an equivalency check for NotFoundError to be used with errors.Is
-func (e *NotFoundError) Is(target error) bool {
-	if os.IsNotExist(target) {
-		return true
-	}
-
-	err, ok := Unwrap(target).(*NotFoundError)
-	if !ok {
-		return false
-	}
-
-	return err.Message == e.Message
-}
-
 // IsNotFound returns whether this error is of NotFoundError type
 func IsNotFound(err error) bool {
 	err = Unwrap(err)
@@ -95,9 +81,9 @@ type AlreadyExistsError struct {
 }
 
 // Error returns log friendly description of an error
-func (e *AlreadyExistsError) Error() string {
-	if e.Message != "" {
-		return e.Message
+func (n *AlreadyExistsError) Error() string {
+	if n.Message != "" {
+		return n.Message
 	}
 	return "object already exists"
 }
@@ -110,16 +96,6 @@ func (AlreadyExistsError) IsAlreadyExistsError() bool {
 // OrigError returns original error (in this case this is the error itself)
 func (e *AlreadyExistsError) OrigError() error {
 	return e
-}
-
-// Is provides an equivalency check for AlreadyExistsError to be used with errors.Is
-func (e *AlreadyExistsError) Is(target error) bool {
-	err, ok := Unwrap(target).(*AlreadyExistsError)
-	if !ok {
-		return false
-	}
-
-	return err.Message == e.Message
 }
 
 // IsAlreadyExists returns whether this is error indicating that object
@@ -160,16 +136,6 @@ func (b *BadParameterError) IsBadParameterError() bool {
 	return true
 }
 
-// Is provides an equivalency check for BadParameterError to be used with errors.Is
-func (b *BadParameterError) Is(target error) bool {
-	err, ok := Unwrap(target).(*BadParameterError)
-	if !ok {
-		return false
-	}
-
-	return err.Message == b.Message
-}
-
 // IsBadParameter returns whether this error is of BadParameterType
 func IsBadParameter(e error) bool {
 	type bp interface {
@@ -205,16 +171,6 @@ func (e *NotImplementedError) OrigError() error {
 // IsNotImplementedError indicates that this error is of NotImplementedError type
 func (e *NotImplementedError) IsNotImplementedError() bool {
 	return true
-}
-
-// Is provides an equivalency check for NotImplementedError to be used with errors.Is
-func (e *NotImplementedError) Is(target error) bool {
-	err, ok := Unwrap(target).(*NotImplementedError)
-	if !ok {
-		return false
-	}
-
-	return err.Message == e.Message
 }
 
 // IsNotImplemented returns whether this error is of NotImplementedError type
@@ -257,16 +213,6 @@ func (e *CompareFailedError) IsCompareFailedError() bool {
 	return true
 }
 
-// Is provides an equivalency check for CompareFailedError to be used with errors.Is
-func (e *CompareFailedError) Is(target error) bool {
-	err, ok := Unwrap(target).(*CompareFailedError)
-	if !ok {
-		return false
-	}
-
-	return err.Message == e.Message
-}
-
 // IsCompareFailed detects if this error is of CompareFailed type
 func IsCompareFailed(e error) bool {
 	type cf interface {
@@ -304,16 +250,6 @@ func (e *AccessDeniedError) IsAccessDeniedError() bool {
 // OrigError returns original error (in this case this is the error itself)
 func (e *AccessDeniedError) OrigError() error {
 	return e
-}
-
-// Is provides an equivalency check for AccessDeniedError to be used with errors.Is
-func (e *AccessDeniedError) Is(target error) bool {
-	err, ok := Unwrap(target).(*AccessDeniedError)
-	if !ok {
-		return false
-	}
-
-	return err.Message == e.Message
 }
 
 // IsAccessDenied detects if this error is of AccessDeniedError type
@@ -405,16 +341,6 @@ func (c *ConnectionProblemError) OrigError() error {
 	return c
 }
 
-// Is provides an equivalency check for ConnectionProblemError to be used with errors.Is
-func (c *ConnectionProblemError) Is(target error) bool {
-	err, ok := Unwrap(target).(*ConnectionProblemError)
-	if !ok {
-		return false
-	}
-
-	return err.Message == c.Message && err.Err == c.Err
-}
-
 // IsConnectionProblem returns whether this error is of ConnectionProblemError
 func IsConnectionProblem(e error) bool {
 	type ad interface {
@@ -437,28 +363,18 @@ type LimitExceededError struct {
 }
 
 // Error is debug - friendly error message
-func (e *LimitExceededError) Error() string {
-	return e.Message
+func (c *LimitExceededError) Error() string {
+	return c.Message
 }
 
 // IsLimitExceededError indicates that this error is of ConnectionProblem
-func (e *LimitExceededError) IsLimitExceededError() bool {
+func (c *LimitExceededError) IsLimitExceededError() bool {
 	return true
 }
 
 // OrigError returns original error (in this case this is the error itself)
-func (e *LimitExceededError) OrigError() error {
-	return e
-}
-
-// Is provides an equivalency check for LimitExceededError to be used with errors.Is
-func (e *LimitExceededError) Is(target error) bool {
-	err, ok := Unwrap(target).(*LimitExceededError)
-	if !ok {
-		return false
-	}
-
-	return err.Message == e.Message
+func (c *LimitExceededError) OrigError() error {
+	return c
 }
 
 // IsLimitExceeded detects if this error is of LimitExceededError
@@ -511,16 +427,6 @@ func (t *TrustError) OrigError() error {
 	return t
 }
 
-// Is provides an equivalency check for TrustError to be used with errors.Is
-func (t *TrustError) Is(target error) bool {
-	err, ok := Unwrap(target).(*TrustError)
-	if !ok {
-		return false
-	}
-
-	return err.Message == t.Message && err.Err == t.Err
-}
-
 // IsTrustError returns if this is a trust error
 func IsTrustError(e error) bool {
 	type te interface {
@@ -553,36 +459,6 @@ func (o *OAuth2Error) Error() string {
 
 // IsOAuth2Error returns whether this error of OAuth2Error type
 func (o *OAuth2Error) IsOAuth2Error() bool {
-	return true
-}
-
-// Is provides an equivalency check for OAuth2Error to be used with errors.Is
-func (o *OAuth2Error) Is(target error) bool {
-	err, ok := Unwrap(target).(*OAuth2Error)
-	if !ok {
-		return false
-	}
-
-	if err.Message != o.Message ||
-		err.Code != o.Code ||
-		len(err.Query) != len(o.Query) {
-		return false
-	}
-
-	for k, v := range err.Query {
-		for k2, v2 := range o.Query {
-			if k != k2 && len(v) != len(v2) {
-				return false
-			}
-
-			for i := range v {
-				if v[i] != v2[i] {
-					return false
-				}
-			}
-		}
-	}
-
 	return true
 }
 
@@ -638,16 +514,6 @@ func (c *RetryError) OrigError() error {
 		return c.Err
 	}
 	return c
-}
-
-// Is provides an equivalency check for RetryError to be used with errors.Is
-func (c *RetryError) Is(target error) bool {
-	err, ok := Unwrap(target).(*RetryError)
-	if !ok {
-		return false
-	}
-
-	return err.Message == c.Message && err.Err == c.Err
 }
 
 // IsRetryError returns whether this error is of ConnectionProblemError

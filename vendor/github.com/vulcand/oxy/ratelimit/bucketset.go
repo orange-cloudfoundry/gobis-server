@@ -5,21 +5,25 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/mailgun/timetools"
 )
 
 // TokenBucketSet represents a set of TokenBucket covering different time periods.
 type TokenBucketSet struct {
 	buckets   map[time.Duration]*tokenBucket
 	maxPeriod time.Duration
+	clock     timetools.TimeProvider
 }
 
 // NewTokenBucketSet creates a `TokenBucketSet` from the specified `rates`.
-func NewTokenBucketSet(rates *RateSet) *TokenBucketSet {
+func NewTokenBucketSet(rates *RateSet, clock timetools.TimeProvider) *TokenBucketSet {
 	tbs := new(TokenBucketSet)
+	tbs.clock = clock
 	// In the majority of cases we will have only one bucket.
 	tbs.buckets = make(map[time.Duration]*tokenBucket, len(rates.m))
 	for _, rate := range rates.m {
-		newBucket := newTokenBucket(rate)
+		newBucket := newTokenBucket(rate, clock)
 		tbs.buckets[rate.period] = newBucket
 		tbs.maxPeriod = maxDuration(tbs.maxPeriod, rate.period)
 	}
@@ -31,7 +35,7 @@ func (tbs *TokenBucketSet) Update(rates *RateSet) {
 	// Update existing buckets and delete those that have no corresponding spec.
 	for _, bucket := range tbs.buckets {
 		if rate, ok := rates.m[bucket.period]; ok {
-			_ = bucket.update(rate)
+			bucket.update(rate)
 		} else {
 			delete(tbs.buckets, bucket.period)
 		}
@@ -39,7 +43,7 @@ func (tbs *TokenBucketSet) Update(rates *RateSet) {
 	// Add missing buckets.
 	for _, rate := range rates.m {
 		if _, ok := tbs.buckets[rate.period]; !ok {
-			newBucket := newTokenBucket(rate)
+			newBucket := newTokenBucket(rate, tbs.clock)
 			tbs.buckets[rate.period] = newBucket
 		}
 	}
@@ -50,7 +54,7 @@ func (tbs *TokenBucketSet) Update(rates *RateSet) {
 	}
 }
 
-// Consume consume tokens.
+// Consume consume tokens
 func (tbs *TokenBucketSet) Consume(tokens int64) (time.Duration, error) {
 	var maxDelay time.Duration = UndefinedDelay
 	var firstErr error
@@ -77,7 +81,7 @@ func (tbs *TokenBucketSet) Consume(tokens int64) (time.Duration, error) {
 	return maxDelay, firstErr
 }
 
-// GetMaxPeriod returns the max period.
+// GetMaxPeriod returns the max period
 func (tbs *TokenBucketSet) GetMaxPeriod() time.Duration {
 	return tbs.maxPeriod
 }
@@ -85,11 +89,11 @@ func (tbs *TokenBucketSet) GetMaxPeriod() time.Duration {
 // debugState returns string that reflects the current state of all buckets in
 // this set. It is intended to be used for debugging and testing only.
 func (tbs *TokenBucketSet) debugState() string {
-	periods := make([]int64, 0, len(tbs.buckets))
+	periods := sort.IntSlice(make([]int, 0, len(tbs.buckets)))
 	for period := range tbs.buckets {
-		periods = append(periods, int64(period))
+		periods = append(periods, int(period))
 	}
-	sort.Slice(periods, func(i, j int) bool { return periods[i] < periods[j] })
+	sort.Sort(periods)
 	bucketRepr := make([]string, 0, len(tbs.buckets))
 	for _, period := range periods {
 		bucket := tbs.buckets[time.Duration(period)]
@@ -98,7 +102,7 @@ func (tbs *TokenBucketSet) debugState() string {
 	return strings.Join(bucketRepr, ", ")
 }
 
-func maxDuration(x, y time.Duration) time.Duration {
+func maxDuration(x time.Duration, y time.Duration) time.Duration {
 	if x > y {
 		return x
 	}

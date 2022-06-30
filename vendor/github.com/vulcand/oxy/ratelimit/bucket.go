@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/vulcand/oxy/internal/holsterv4/clock"
+	"github.com/mailgun/timetools"
 )
 
-// UndefinedDelay  default delay.
+// UndefinedDelay  default delay
 const UndefinedDelay = -1
 
 // rate defines token bucket parameters.
@@ -34,24 +34,27 @@ type tokenBucket struct {
 	// The number of tokens available for consumption at the moment. It can
 	// nether be larger then capacity.
 	availableTokens int64
+	// Interface that gives current time (so tests can override)
+	clock timetools.TimeProvider
 	// Tells when tokensAvailable was updated the last time.
-	lastRefresh clock.Time
+	lastRefresh time.Time
 	// The number of tokens consumed the last time.
 	lastConsumed int64
 }
 
 // newTokenBucket crates a `tokenBucket` instance for the specified `Rate`.
-func newTokenBucket(rate *rate) *tokenBucket {
+func newTokenBucket(rate *rate, clock timetools.TimeProvider) *tokenBucket {
 	period := rate.period
 	if period == 0 {
-		period = clock.Nanosecond
+		period = time.Nanosecond
 	}
 
 	return &tokenBucket{
 		period:          period,
 		timePerToken:    time.Duration(int64(period) / rate.average),
 		burst:           rate.burst,
-		lastRefresh:     clock.Now().UTC(),
+		clock:           clock,
+		lastRefresh:     clock.UtcNow(),
 		availableTokens: rate.burst,
 	}
 }
@@ -87,7 +90,7 @@ func (tb *tokenBucket) rollback() {
 }
 
 // update modifies `average` and `burst` fields of the token bucket according
-// to the provided `Rate`.
+// to the provided `Rate`
 func (tb *tokenBucket) update(rate *rate) error {
 	if rate.period != tb.period {
 		return fmt.Errorf("period mismatch: %v != %v", tb.period, rate.period)
@@ -111,7 +114,7 @@ func (tb *tokenBucket) timeTillAvailable(tokens int64) time.Duration {
 // It is calculated based on the refill rate, the time passed since last refresh,
 // and is limited by the bucket capacity.
 func (tb *tokenBucket) updateAvailableTokens() {
-	now := clock.Now().UTC()
+	now := tb.clock.UtcNow()
 	timePassed := now.Sub(tb.lastRefresh)
 
 	if tb.timePerToken == 0 {

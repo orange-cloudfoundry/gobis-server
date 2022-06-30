@@ -31,13 +31,13 @@ import (
 	"sync"
 	"time"
 
+	"github.com/mailgun/timetools"
 	log "github.com/sirupsen/logrus"
-	"github.com/vulcand/oxy/internal/holsterv4/clock"
 	"github.com/vulcand/oxy/memmetrics"
 	"github.com/vulcand/oxy/utils"
 )
 
-// CircuitBreaker is http.Handler that implements circuit breaker pattern.
+// CircuitBreaker is http.Handler that implements circuit breaker pattern
 type CircuitBreaker struct {
 	m       *sync.RWMutex
 	metrics *memmetrics.RTMetrics
@@ -51,25 +51,28 @@ type CircuitBreaker struct {
 	onStandby SideEffect
 
 	state cbState
-	until clock.Time
+	until time.Time
 
 	rc *ratioController
 
 	checkPeriod time.Duration
-	lastCheck   clock.Time
+	lastCheck   time.Time
 
 	fallback http.Handler
 	next     http.Handler
 
+	clock timetools.TimeProvider
+
 	log *log.Logger
 }
 
-// New creates a new CircuitBreaker middleware.
+// New creates a new CircuitBreaker middleware
 func New(next http.Handler, expression string, options ...CircuitBreakerOption) (*CircuitBreaker, error) {
 	cb := &CircuitBreaker{
 		m:    &sync.RWMutex{},
 		next: next,
 		// Default values. Might be overwritten by options below.
+		clock:            &timetools.RealTime{},
 		checkPeriod:      defaultCheckPeriod,
 		fallbackDuration: defaultFallbackDuration,
 		recoveryDuration: defaultRecoveryDuration,
@@ -110,7 +113,7 @@ func Logger(l *log.Logger) CircuitBreakerOption {
 
 func (c *CircuitBreaker) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	if c.log.Level >= log.DebugLevel {
-		logEntry := c.log.WithField("Request", utils.DumpHTTPRequest(req))
+		logEntry := c.log.WithField("Request", utils.DumpHttpRequest(req))
 		logEntry.Debug("vulcand/oxy/circuitbreaker: begin ServeHttp on request")
 		defer logEntry.Debug("vulcand/oxy/circuitbreaker: completed ServeHttp on request")
 	}
@@ -131,8 +134,8 @@ func (c *CircuitBreaker) Wrap(next http.Handler) {
 	c.next = next
 }
 
-// updateState updates internal state and returns true if fallback should be used and false otherwise.
-func (c *CircuitBreaker) activateFallback(_ http.ResponseWriter, _ *http.Request) bool {
+// updateState updates internal state and returns true if fallback should be used and false otherwise
+func (c *CircuitBreaker) activateFallback(w http.ResponseWriter, req *http.Request) bool {
 	// Quick check with read locks optimized for normal operation use-case
 	if c.isStandby() {
 		return false
@@ -148,7 +151,7 @@ func (c *CircuitBreaker) activateFallback(_ http.ResponseWriter, _ *http.Request
 		// someone else has set it to standby just now
 		return false
 	case stateTripped:
-		if clock.Now().UTC().Before(c.until) {
+		if c.clock.UtcNow().Before(c.until) {
 			return true
 		}
 		// We have been in active state enough, enter recovering state
@@ -156,8 +159,8 @@ func (c *CircuitBreaker) activateFallback(_ http.ResponseWriter, _ *http.Request
 		fallthrough
 	case stateRecovering:
 		// We have been in recovering state enough, enter standby and allow request
-		if clock.Now().UTC().After(c.until) {
-			c.setState(stateStandby, clock.Now().UTC())
+		if c.clock.UtcNow().After(c.until) {
+			c.setState(stateStandby, c.clock.UtcNow())
 			return false
 		}
 		// ratio controller allows this request
@@ -170,12 +173,12 @@ func (c *CircuitBreaker) activateFallback(_ http.ResponseWriter, _ *http.Request
 }
 
 func (c *CircuitBreaker) serve(w http.ResponseWriter, req *http.Request) {
-	start := clock.Now().UTC()
+	start := c.clock.UtcNow()
 	p := utils.NewProxyWriterWithLogger(w, c.log)
 
 	c.next.ServeHTTP(p, req)
 
-	latency := clock.Now().UTC().Sub(start)
+	latency := c.clock.UtcNow().Sub(start)
 	c.metrics.Record(p.StatusCode(), latency)
 
 	// Note that this call is less expensive than it looks -- checkCondition only performs the real check
@@ -189,7 +192,7 @@ func (c *CircuitBreaker) isStandby() bool {
 	return c.state == stateStandby
 }
 
-// String returns log-friendly representation of the circuit breaker state.
+// String returns log-friendly representation of the circuit breaker state
 func (c *CircuitBreaker) String() string {
 	switch c.state {
 	case stateTripped, stateRecovering:
@@ -199,7 +202,7 @@ func (c *CircuitBreaker) String() string {
 	}
 }
 
-// exec executes side effect.
+// exec executes side effect
 func (c *CircuitBreaker) exec(s SideEffect) {
 	if s == nil {
 		return
@@ -211,11 +214,11 @@ func (c *CircuitBreaker) exec(s SideEffect) {
 	}()
 }
 
-func (c *CircuitBreaker) setState(state cbState, until time.Time) {
-	c.log.Debugf("%v setting state to %v, until %v", c, state, until)
-	c.state = state
+func (c *CircuitBreaker) setState(new cbState, until time.Time) {
+	c.log.Debugf("%v setting state to %v, until %v", c, new, until)
+	c.state = new
 	c.until = until
-	switch state {
+	switch new {
 	case stateTripped:
 		c.exec(c.onTripped)
 	case stateStandby:
@@ -226,10 +229,10 @@ func (c *CircuitBreaker) setState(state cbState, until time.Time) {
 func (c *CircuitBreaker) timeToCheck() bool {
 	c.m.RLock()
 	defer c.m.RUnlock()
-	return clock.Now().UTC().After(c.lastCheck)
+	return c.clock.UtcNow().After(c.lastCheck)
 }
 
-// Checks if tripping condition matches and sets circuit breaker to the tripped state.
+// Checks if tripping condition matches and sets circuit breaker to the tripped state
 func (c *CircuitBreaker) checkAndSet() {
 	if !c.timeToCheck() {
 		return
@@ -239,10 +242,10 @@ func (c *CircuitBreaker) checkAndSet() {
 	defer c.m.Unlock()
 
 	// Other goroutine could have updated the lastCheck variable before we grabbed mutex
-	if !clock.Now().UTC().After(c.lastCheck) {
+	if !c.clock.UtcNow().After(c.lastCheck) {
 		return
 	}
-	c.lastCheck = clock.Now().UTC().Add(c.checkPeriod)
+	c.lastCheck = c.clock.UtcNow().Add(c.checkPeriod)
 
 	if c.state == stateTripped {
 		c.log.Debugf("%v skip set tripped", c)
@@ -253,18 +256,27 @@ func (c *CircuitBreaker) checkAndSet() {
 		return
 	}
 
-	c.setState(stateTripped, clock.Now().UTC().Add(c.fallbackDuration))
+	c.setState(stateTripped, c.clock.UtcNow().Add(c.fallbackDuration))
 	c.metrics.Reset()
 }
 
 func (c *CircuitBreaker) setRecovering() {
-	c.setState(stateRecovering, clock.Now().UTC().Add(c.recoveryDuration))
-	c.rc = newRatioController(c.recoveryDuration, c.log)
+	c.setState(stateRecovering, c.clock.UtcNow().Add(c.recoveryDuration))
+	c.rc = newRatioController(c.clock, c.recoveryDuration, c.log)
 }
 
 // CircuitBreakerOption represents an option you can pass to New.
 // See the documentation for the individual options below.
 type CircuitBreakerOption func(*CircuitBreaker) error
+
+// Clock allows you to fake che CircuitBreaker's view of the current time.
+// Intended for unit tests.
+func Clock(clock timetools.TimeProvider) CircuitBreakerOption {
+	return func(c *CircuitBreaker) error {
+		c.clock = clock
+		return nil
+	}
+}
 
 // FallbackDuration is how long the CircuitBreaker will remain in the Tripped
 // state before trying to recover.
@@ -320,7 +332,7 @@ func Fallback(h http.Handler) CircuitBreakerOption {
 	}
 }
 
-// cbState is the state of the circuit breaker.
+// cbState is the state of the circuit breaker
 type cbState int
 
 func (s cbState) String() string {
@@ -336,25 +348,25 @@ func (s cbState) String() string {
 }
 
 const (
-	// CircuitBreaker is passing all requests and watching stats.
+	// CircuitBreaker is passing all requests and watching stats
 	stateStandby = iota
-	// CircuitBreaker activates fallback scenario for all requests.
+	// CircuitBreaker activates fallback scenario for all requests
 	stateTripped
-	// CircuitBreaker passes some requests to go through, rejecting others.
+	// CircuitBreaker passes some requests to go through, rejecting others
 	stateRecovering
 )
 
 const (
-	defaultFallbackDuration = 10 * clock.Second
-	defaultRecoveryDuration = 10 * clock.Second
-	defaultCheckPeriod      = 100 * clock.Millisecond
+	defaultFallbackDuration = 10 * time.Second
+	defaultRecoveryDuration = 10 * time.Second
+	defaultCheckPeriod      = 100 * time.Millisecond
 )
 
 var defaultFallback = &fallback{}
 
 type fallback struct{}
 
-func (f *fallback) ServeHTTP(w http.ResponseWriter, _ *http.Request) {
+func (f *fallback) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	w.WriteHeader(http.StatusServiceUnavailable)
-	_, _ = w.Write([]byte(http.StatusText(http.StatusServiceUnavailable)))
+	w.Write([]byte(http.StatusText(http.StatusServiceUnavailable)))
 }
