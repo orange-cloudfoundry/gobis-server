@@ -1,6 +1,9 @@
 # github.com/ArthurHlt/logrus-cef-formatter v1.0.0
 ## explicit
 github.com/ArthurHlt/logrus-cef-formatter
+# github.com/HdrHistogram/hdrhistogram-go v1.1.2
+## explicit; go 1.14
+github.com/HdrHistogram/hdrhistogram-go
 # github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible
 ## explicit
 github.com/Knetic/govaluate
@@ -39,9 +42,6 @@ github.com/cloudfoundry-community/gautocloud/utils
 # github.com/cloudfoundry-community/go-cfenv v1.18.0
 ## explicit; go 1.11
 github.com/cloudfoundry-community/go-cfenv
-# github.com/codahale/hdrhistogram v1.1.0 => github.com/HdrHistogram/hdrhistogram-go v0.9.0
-## explicit
-github.com/codahale/hdrhistogram
 # github.com/cpuguy83/go-md2man/v2 v2.0.2
 ## explicit; go 1.11
 github.com/cpuguy83/go-md2man/v2/md2man
@@ -85,7 +85,7 @@ github.com/gorilla/sessions
 # github.com/gorilla/websocket v1.5.0
 ## explicit; go 1.12
 github.com/gorilla/websocket
-# github.com/gravitational/trace v1.1.16-0.20220114165159-14a9a7dd6aaf
+# github.com/gravitational/trace v1.1.19
 ## explicit; go 1.15
 github.com/gravitational/trace
 github.com/gravitational/trace/internal
@@ -113,29 +113,20 @@ github.com/jonboulle/clockwork
 # github.com/magiconair/properties v1.8.6
 ## explicit; go 1.13
 github.com/magiconair/properties
-# github.com/mailgun/minheap v0.0.0-20170619185613-3dbe6c6bf55f
-## explicit
-github.com/mailgun/minheap
 # github.com/mailgun/multibuf v0.1.2
 ## explicit; go 1.17
 github.com/mailgun/multibuf
-# github.com/mailgun/timetools v0.0.0-20170619190023-f3a7b8ffff47
-## explicit
-github.com/mailgun/timetools
-# github.com/mailgun/ttlmap v0.0.0-20170619185759-c1c17f74874f
-## explicit
-github.com/mailgun/ttlmap
 # github.com/mitchellh/mapstructure v1.5.0
 ## explicit; go 1.14
 github.com/mitchellh/mapstructure
-# github.com/orange-cloudfoundry/go-auth-pubtkt v1.0.2
+# github.com/orange-cloudfoundry/go-auth-pubtkt v1.0.4
 ## explicit; go 1.12
 github.com/orange-cloudfoundry/go-auth-pubtkt
-# github.com/orange-cloudfoundry/gobis v1.8.0
-## explicit; go 1.17
+# github.com/orange-cloudfoundry/gobis v1.11.2
+## explicit; go 1.18
 github.com/orange-cloudfoundry/gobis
-# github.com/orange-cloudfoundry/gobis-middlewares v1.3.3
-## explicit; go 1.16
+# github.com/orange-cloudfoundry/gobis-middlewares v1.12.3
+## explicit; go 1.18
 github.com/orange-cloudfoundry/gobis-middlewares
 github.com/orange-cloudfoundry/gobis-middlewares/authpubtkt
 github.com/orange-cloudfoundry/gobis-middlewares/basic2token
@@ -212,12 +203,14 @@ github.com/unrolled/secure
 # github.com/urfave/cli v1.22.9
 ## explicit; go 1.11
 github.com/urfave/cli
-# github.com/vulcand/oxy v1.3.0
-## explicit; go 1.14
+# github.com/vulcand/oxy v1.4.1
+## explicit; go 1.17
 github.com/vulcand/oxy/buffer
 github.com/vulcand/oxy/cbreaker
 github.com/vulcand/oxy/connlimit
 github.com/vulcand/oxy/forward
+github.com/vulcand/oxy/internal/holsterv4/clock
+github.com/vulcand/oxy/internal/holsterv4/collections
 github.com/vulcand/oxy/memmetrics
 github.com/vulcand/oxy/ratelimit
 github.com/vulcand/oxy/trace
@@ -313,10 +306,6 @@ gopkg.in/ini.v1
 # gopkg.in/ldap.v2 v2.5.1
 ## explicit
 gopkg.in/ldap.v2
-# gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
-## explicit
-gopkg.in/mgo.v2/bson
-gopkg.in/mgo.v2/internal/json
 # gopkg.in/yaml.v2 v2.4.0
 ## explicit; go 1.15
 gopkg.in/yaml.v2
