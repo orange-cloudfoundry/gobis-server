@@ -11,7 +11,7 @@ package main
 import (
     "net/http"
 
-    "github.com/unrolled/secure" // or "gopkg.in/unrolled/secure.v1"
+    "github.com/unrolled/secure"
 )
 
 var myHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -153,7 +153,7 @@ import (
     "log"
     "net/http"
 
-    "github.com/unrolled/secure" // or "gopkg.in/unrolled/secure.v1"
+    "github.com/unrolled/secure"
 )
 
 var myHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -186,7 +186,26 @@ The STS header will only be sent on verified HTTPS connections (and when `IsDeve
 * The `preload` flag is required for domain inclusion in Chrome's [preload](https://hstspreload.appspot.com/) list.
 
 ### Content Security Policy
-If you need dynamic support for CSP while using Websockets, check out this other middleware [awakenetworks/csp](https://github.com/awakenetworks/csp).
+You can utilize the CSP Builder to create your policies:
+
+~~~ go
+import (
+	"github.com/unrolled/secure"
+	"github.com/unrolled/secure/cspbuilder"
+)
+
+cspBuilder := cspbuilder.Builder{
+	Directives: map[string][]string{
+		cspbuilder.DefaultSrc: {"self"},
+		cspbuilder.ScriptSrc:  {"self", "www.google-analytics.com"},
+		cspbuilder.ImgSrc:     {"*"},
+	},
+}
+
+opt := secure.Options{
+	ContentSecurityPolicy: cspBuilder.MustBuild(),
+}
+~~~
 
 ## Integration examples
 
@@ -199,7 +218,7 @@ import (
     "net/http"
 
     "github.com/pressly/chi"
-    "github.com/unrolled/secure" // or "gopkg.in/unrolled/secure.v1"
+    "github.com/unrolled/secure"
 )
 
 func main() {
@@ -227,7 +246,7 @@ import (
     "net/http"
 
     "github.com/labstack/echo"
-    "github.com/unrolled/secure" // or "gopkg.in/unrolled/secure.v1"
+    "github.com/unrolled/secure"
 )
 
 func main() {
@@ -252,7 +271,7 @@ package main
 
 import (
     "github.com/gin-gonic/gin"
-    "github.com/unrolled/secure" // or "gopkg.in/unrolled/secure.v1"
+    "github.com/unrolled/secure"
 )
 
 func main() {
@@ -295,7 +314,7 @@ package main
 import (
     "net/http"
 
-    "github.com/unrolled/secure" // or "gopkg.in/unrolled/secure.v1"
+    "github.com/unrolled/secure"
     "github.com/zenazn/goji"
     "github.com/zenazn/goji/web"
 )
@@ -320,7 +339,7 @@ package main
 
 import (
     "github.com/kataras/iris/v12"
-    "github.com/unrolled/secure" // or "gopkg.in/unrolled/secure.v1"
+    "github.com/unrolled/secure"
 )
 
 func main() {
@@ -361,7 +380,7 @@ import (
     "net/http"
 
     "github.com/gorilla/mux"
-    "github.com/unrolled/secure" // or "gopkg.in/unrolled/secure.v1"
+    "github.com/unrolled/secure"
 )
 
 func main() {
@@ -386,7 +405,7 @@ import (
     "net/http"
 
     "github.com/urfave/negroni"
-    "github.com/unrolled/secure" // or "gopkg.in/unrolled/secure.v1"
+    "github.com/unrolled/secure"
 )
 
 func main() {

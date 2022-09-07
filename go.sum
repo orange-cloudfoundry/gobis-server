@@ -244,8 +244,8 @@ github.com/orange-cloudfoundry/go-auth-pubtkt v1.0.4 h1:HH9S5oLqHaeM17igTIzCRyAB
 github.com/orange-cloudfoundry/go-auth-pubtkt v1.0.4/go.mod h1:4rJSLUWkGy2iei3khpfYLGMMGs8wPc4n0XmLNkhgqHY=
 github.com/orange-cloudfoundry/gobis v1.13.2 h1:s7wX/Vr58Isu4C2bitt/n/AZveXr2yykTn3h6WtSMjY=
 github.com/orange-cloudfoundry/gobis v1.13.2/go.mod h1:VelpTO75gpXAXt6YvsYw9bayZV8eXMDhTG4nAl5wgdg=
-github.com/orange-cloudfoundry/gobis-middlewares v1.17.3 h1:iAlm5JohAascWfkuDPjEf9jaGPF+uaw0nZmCMIL94pA=
-github.com/orange-cloudfoundry/gobis-middlewares v1.17.3/go.mod h1:M8ImtXLavdSOH9UOQfndESXc1XvKX271TPGq5jHX0nw=
+github.com/orange-cloudfoundry/gobis-middlewares v1.18.0 h1:xkJ3kZ3+Up8YV/uQDNATAwuS87VG8TPH5dn3E7HpeKI=
+github.com/orange-cloudfoundry/gobis-middlewares v1.18.0/go.mod h1:3LrORaM3znxpHJ3gqPp23P5a7FUjC81l38gwJlsIeQs=
 github.com/pelletier/go-toml v1.9.5 h1:4yBQzkHv+7BHq2PQUZF3Mx0IYxG7LsP222s7Agd3ve8=
 github.com/pelletier/go-toml v1.9.5/go.mod h1:u1nR/EPcESfeI/szUZKdtJ0xRNbUoANCkoOuaOx1Y+c=
 github.com/pelletier/go-toml/v2 v2.0.2 h1:+jQXlF3scKIcSEKkdHzXhCTDLPFi5r1wnK6yPS+49Gw=
@@ -302,8 +302,8 @@ github.com/subosito/gotenv v1.4.0 h1:yAzM1+SmVcz5R4tXGsNMu1jUl2aOJXoiWUCEwwnGrvs
 github.com/subosito/gotenv v1.4.0/go.mod h1:mZd6rFysKEcUhUHXJk0C/08wAgyDBFuwEYL7vWWGaGo=
 github.com/thoas/go-funk v0.9.2 h1:oKlNYv0AY5nyf9g+/GhMgS/UO2ces0QRdPKwkhY3VCk=
 github.com/thoas/go-funk v0.9.2/go.mod h1:+IWnUfUmFO1+WVYQWQtIJHeRRdaIyyYglZN7xzUPe4Q=
-github.com/unrolled/secure v1.12.0 h1:7k3jcgLwfjiKkhQde6VbQ3D4KDLtDBqDd/hs3PPANDY=
-github.com/unrolled/secure v1.12.0/go.mod h1:BmF5hyM6tXczk3MpQkFf1hpKSRqCyhqcbiQtiAF7+40=
+github.com/unrolled/secure v1.13.0 h1:sdr3Phw2+f8Px8HE5sd1EHdj1aV3yUwed/uZXChLFsk=
+github.com/unrolled/secure v1.13.0/go.mod h1:BmF5hyM6tXczk3MpQkFf1hpKSRqCyhqcbiQtiAF7+40=
 github.com/urfave/cli v1.22.10 h1:p8Fspmz3iTctJstry1PYS3HVdllxnEzTEsgIgtxTrCk=
 github.com/urfave/cli v1.22.10/go.mod h1:Gos4lmkARVdJ6EkW0WaNv/tZAAMe9V7XWyB60NtXRu0=
 github.com/urfave/negroni v1.0.0 h1:kIimOitoypq34K7TG7DUaJ9kq/N4Ofuwi1sjz0KipXc=
