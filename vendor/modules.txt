@@ -26,8 +26,8 @@ github.com/casbin/casbin/persist/file-adapter
 github.com/casbin/casbin/rbac
 github.com/casbin/casbin/rbac/default-role-manager
 github.com/casbin/casbin/util
-# github.com/cloudfoundry-community/gautocloud v1.1.10
-## explicit; go 1.18
+# github.com/cloudfoundry-community/gautocloud v1.1.11
+## explicit; go 1.19
 github.com/cloudfoundry-community/gautocloud
 github.com/cloudfoundry-community/gautocloud/cloudenv
 github.com/cloudfoundry-community/gautocloud/connectors
