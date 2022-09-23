@@ -125,8 +125,8 @@ github.com/orange-cloudfoundry/go-auth-pubtkt
 # github.com/orange-cloudfoundry/gobis v1.13.2
 ## explicit; go 1.18
 github.com/orange-cloudfoundry/gobis
-# github.com/orange-cloudfoundry/gobis-middlewares v1.18.0
-## explicit; go 1.18
+# github.com/orange-cloudfoundry/gobis-middlewares v1.19.0
+## explicit; go 1.19
 github.com/orange-cloudfoundry/gobis-middlewares
 github.com/orange-cloudfoundry/gobis-middlewares/authpubtkt
 github.com/orange-cloudfoundry/gobis-middlewares/basic2token

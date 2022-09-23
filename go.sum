@@ -146,7 +146,7 @@ github.com/google/go-cmp v0.5.1/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/
 github.com/google/go-cmp v0.5.2/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/go-cmp v0.5.4/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/go-cmp v0.5.5/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
-github.com/google/go-cmp v0.5.8 h1:e6P7q2lk1O+qJJb4BtCQXlK8vWEO8V1ZeuEdJNOqZyg=
+github.com/google/go-cmp v0.5.9 h1:O2Tfq5qg4qc4AmwVlvv0oLiVAGB7enBSJ2x2DqQFi38=
 github.com/google/martian v2.1.0+incompatible/go.mod h1:9I4somxYTbIHy5NJKHRl3wXiIaQGbYVAs8BPL6v8lEs=
 github.com/google/martian/v3 v3.0.0/go.mod h1:y5Zk1BBys9G+gd6Jrk0W3cC1+ELVxBWuIGO+w/tUAp0=
 github.com/google/martian/v3 v3.1.0/go.mod h1:y5Zk1BBys9G+gd6Jrk0W3cC1+ELVxBWuIGO+w/tUAp0=
@@ -244,8 +244,8 @@ github.com/orange-cloudfoundry/go-auth-pubtkt v1.0.4 h1:HH9S5oLqHaeM17igTIzCRyAB
 github.com/orange-cloudfoundry/go-auth-pubtkt v1.0.4/go.mod h1:4rJSLUWkGy2iei3khpfYLGMMGs8wPc4n0XmLNkhgqHY=
 github.com/orange-cloudfoundry/gobis v1.13.2 h1:s7wX/Vr58Isu4C2bitt/n/AZveXr2yykTn3h6WtSMjY=
 github.com/orange-cloudfoundry/gobis v1.13.2/go.mod h1:VelpTO75gpXAXt6YvsYw9bayZV8eXMDhTG4nAl5wgdg=
-github.com/orange-cloudfoundry/gobis-middlewares v1.18.0 h1:xkJ3kZ3+Up8YV/uQDNATAwuS87VG8TPH5dn3E7HpeKI=
-github.com/orange-cloudfoundry/gobis-middlewares v1.18.0/go.mod h1:3LrORaM3znxpHJ3gqPp23P5a7FUjC81l38gwJlsIeQs=
+github.com/orange-cloudfoundry/gobis-middlewares v1.19.0 h1:jiLmzpywsU17vU3DqmxL1tj31J3TNReT9uzVItPOWRw=
+github.com/orange-cloudfoundry/gobis-middlewares v1.19.0/go.mod h1:53qd0BxcB+j6wW7YbilxIeaZcCBfS51cqnNi7Mu0FIY=
 github.com/pelletier/go-toml v1.9.5 h1:4yBQzkHv+7BHq2PQUZF3Mx0IYxG7LsP222s7Agd3ve8=
 github.com/pelletier/go-toml v1.9.5/go.mod h1:u1nR/EPcESfeI/szUZKdtJ0xRNbUoANCkoOuaOx1Y+c=
 github.com/pelletier/go-toml/v2 v2.0.5 h1:ipoSadvV8oGUjnUbMub59IDPPwfxF694nG/jwbMiyQg=
