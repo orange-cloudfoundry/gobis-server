@@ -3,7 +3,7 @@ module github.com/orange-cloudfoundry/gobis-server
 go 1.19
 
 require (
-	github.com/cloudfoundry-community/gautocloud v1.1.10
+	github.com/cloudfoundry-community/gautocloud v1.1.11
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/orange-cloudfoundry/gobis v1.13.2
