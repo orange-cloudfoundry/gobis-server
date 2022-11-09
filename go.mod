@@ -6,7 +6,7 @@ require (
 	github.com/cloudfoundry-community/gautocloud v1.1.11
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/orange-cloudfoundry/gobis v1.18.0
+	github.com/orange-cloudfoundry/gobis v1.18.1
 	github.com/orange-cloudfoundry/gobis-middlewares v1.26.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli v1.22.10
@@ -54,7 +54,7 @@ require (
 	github.com/subosito/gotenv v1.4.1 // indirect
 	github.com/thoas/go-funk v0.9.2 // indirect
 	github.com/unrolled/secure v1.13.0 // indirect
-	github.com/vulcand/oxy v1.4.1 // indirect
+	github.com/vulcand/oxy v1.4.2 // indirect
 	github.com/vulcand/predicate v1.2.0 // indirect
 	golang.org/x/net v0.1.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20220909003341-f21342109be1 // indirect
