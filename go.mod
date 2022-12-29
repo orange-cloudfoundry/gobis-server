@@ -7,7 +7,7 @@ require (
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/orange-cloudfoundry/gobis v1.18.4
-	github.com/orange-cloudfoundry/gobis-middlewares v1.26.6
+	github.com/orange-cloudfoundry/gobis-middlewares v1.26.7
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli v1.22.10
 	golang.org/x/crypto v0.0.0-20220919173607-35f4265a4bc0
@@ -43,7 +43,7 @@ require (
 	github.com/orange-cloudfoundry/go-auth-pubtkt v1.0.4 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
-	github.com/rs/cors v1.8.2 // indirect
+	github.com/rs/cors v1.8.3 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/spf13/afero v1.9.2 // indirect
