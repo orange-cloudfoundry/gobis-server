@@ -6,7 +6,7 @@ require (
 	github.com/cloudfoundry-community/gautocloud v1.2.0
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/orange-cloudfoundry/gobis v1.18.4
+	github.com/orange-cloudfoundry/gobis v1.19.0
 	github.com/orange-cloudfoundry/gobis-middlewares v1.26.7
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli v1.22.10
@@ -34,7 +34,7 @@ require (
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/gorilla/sessions v1.2.1 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
-	github.com/gravitational/trace v1.1.19 // indirect
+	github.com/gravitational/trace v1.2.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jonboulle/clockwork v0.3.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
