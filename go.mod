@@ -9,7 +9,7 @@ require (
 	github.com/orange-cloudfoundry/gobis v1.19.0
 	github.com/orange-cloudfoundry/gobis-middlewares v1.28.0
 	github.com/sirupsen/logrus v1.9.0
-	github.com/urfave/cli v1.22.10
+	github.com/urfave/cli v1.22.11
 	golang.org/x/crypto v0.4.0
 	gopkg.in/yaml.v2 v2.4.0
 )
