@@ -6,7 +6,7 @@ require (
 	github.com/cloudfoundry-community/gautocloud v1.2.0
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/orange-cloudfoundry/gobis v1.22.2
+	github.com/orange-cloudfoundry/gobis v1.22.3
 	github.com/orange-cloudfoundry/gobis-middlewares v1.34.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli v1.22.12
