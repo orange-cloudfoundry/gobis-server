@@ -7,7 +7,7 @@ require (
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/orange-cloudfoundry/gobis v1.22.3
-	github.com/orange-cloudfoundry/gobis-middlewares v1.34.0
+	github.com/orange-cloudfoundry/gobis-middlewares v1.34.1
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli v1.22.12
 	golang.org/x/crypto v0.4.0
@@ -29,7 +29,7 @@ require (
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/goji/httpauth v0.0.0-20160601135302-2da839ab0f4d // indirect
 	github.com/golang/mock v1.6.0 // indirect
-	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/gorilla/sessions v1.2.1 // indirect
