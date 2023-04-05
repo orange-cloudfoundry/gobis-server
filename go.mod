@@ -3,14 +3,14 @@ module github.com/orange-cloudfoundry/gobis-server
 go 1.19
 
 require (
-	github.com/cloudfoundry-community/gautocloud v1.2.0
+	github.com/cloudfoundry-community/gautocloud v1.3.0
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/orange-cloudfoundry/gobis v1.22.6
 	github.com/orange-cloudfoundry/gobis-middlewares v1.34.4
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli v1.22.12
-	golang.org/x/crypto v0.4.0
+	golang.org/x/crypto v0.7.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -41,17 +41,16 @@ require (
 	github.com/mailgun/multibuf v0.1.2 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/orange-cloudfoundry/go-auth-pubtkt v1.1.0 // indirect
-	github.com/pelletier/go-toml v1.9.5 // indirect
-	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
+	github.com/pelletier/go-toml/v2 v2.0.7 // indirect
 	github.com/rs/cors v1.8.3 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect
-	github.com/spf13/afero v1.9.3 // indirect
+	github.com/spf13/afero v1.9.5 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/spf13/viper v1.14.0 // indirect
-	github.com/subosito/gotenv v1.4.1 // indirect
+	github.com/spf13/viper v1.15.0 // indirect
+	github.com/subosito/gotenv v1.4.2 // indirect
 	github.com/thoas/go-funk v0.9.3 // indirect
 	github.com/unrolled/secure v1.13.0 // indirect
 	github.com/vulcand/oxy v1.4.2 // indirect
@@ -62,7 +61,7 @@ require (
 	golang.org/x/term v0.6.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/protobuf v1.28.1 // indirect
+	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/asn1-ber.v1 v1.0.0-20181015200546-f715ec2f112d // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/ldap.v2 v2.5.1 // indirect
