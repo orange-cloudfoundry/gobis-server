@@ -6,7 +6,7 @@ require (
 	github.com/cloudfoundry-community/gautocloud v1.3.0
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/orange-cloudfoundry/gobis v1.22.6
+	github.com/orange-cloudfoundry/gobis v1.23.0
 	github.com/orange-cloudfoundry/gobis-middlewares v1.34.4
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli v1.22.12
@@ -34,11 +34,11 @@ require (
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/gorilla/sessions v1.2.1 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
-	github.com/gravitational/trace v1.2.0 // indirect
+	github.com/gravitational/trace v1.2.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/jonboulle/clockwork v0.3.0 // indirect
+	github.com/jonboulle/clockwork v0.4.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
-	github.com/mailgun/multibuf v0.1.2 // indirect
+	github.com/mailgun/multibuf v0.2.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/orange-cloudfoundry/go-auth-pubtkt v1.1.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.7 // indirect
