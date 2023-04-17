@@ -231,8 +231,8 @@ github.com/orange-cloudfoundry/go-auth-pubtkt v1.2.0 h1:Qpn+ZdHkwmywGeKX2p2sBYpu
 github.com/orange-cloudfoundry/go-auth-pubtkt v1.2.0/go.mod h1:0T1Ovf84pyfFAYp25zT9c7vR+81TX1h5m2iIlkvrTB4=
 github.com/orange-cloudfoundry/gobis v1.23.0 h1:9bF/CYWXLTWzZ4kDMC4knQDrVuV7OogrcCVPyksry9k=
 github.com/orange-cloudfoundry/gobis v1.23.0/go.mod h1:FWDPT8dXxXuLRjc8WfG617ANL0AUyuPd5WS7jPrILwI=
-github.com/orange-cloudfoundry/gobis-middlewares v1.37.0 h1:PFf2RXT9z3+FxMgYCz/efmGEFCFovPEs7iXn0bEGH+o=
-github.com/orange-cloudfoundry/gobis-middlewares v1.37.0/go.mod h1:twVKXFLTcNPKFl0aDqZdYRJG/iJ8I4D8Rm+XzXz/Om8=
+github.com/orange-cloudfoundry/gobis-middlewares v1.38.0 h1:9ASe1DCk6lWcitlcmaFEjsws/ay6DSbMOA3M5AGJD50=
+github.com/orange-cloudfoundry/gobis-middlewares v1.38.0/go.mod h1:iuNUZCDH5UkptQxLx8T2cXN2Z3X1vRAnI6IoXd3nY7Y=
 github.com/pelletier/go-toml/v2 v2.0.7 h1:muncTPStnKRos5dpVKULv2FVd4bMOhNePj9CjgDb8Us=
 github.com/pelletier/go-toml/v2 v2.0.7/go.mod h1:eumQOmlWiOPt5WriQQqoM5y18pDHwha2N+QD+EUNTek=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
@@ -243,8 +243,8 @@ github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:
 github.com/rogpeppe/fastuuid v1.2.0/go.mod h1:jVj6XXZzXRy/MSR5jhDC/2q6DgLz+nrA6LYCDYWNEvQ=
 github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFRclV5y23lUDJ4=
 github.com/rogpeppe/go-internal v1.6.1 h1:/FiVV8dS/e+YqF2JvO3yXRFbBLTIuSDkuC7aBOAvL+k=
-github.com/rs/cors v1.8.3 h1:O+qNyWn7Z+F9M0ILBHgMVPuB1xTOucVd5gtaYyXBpRo=
-github.com/rs/cors v1.8.3/go.mod h1:XyqrcTp5zjWr1wsJ8PIRZssZ8b/WMcMf71DJnit4EMU=
+github.com/rs/cors v1.9.0 h1:l9HGsTsHJcvW14Nk7J9KFz8bzeAWXn3CG6bgt7LsrAE=
+github.com/rs/cors v1.9.0/go.mod h1:XyqrcTp5zjWr1wsJ8PIRZssZ8b/WMcMf71DJnit4EMU=
 github.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf35Ld67mk=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/satori/go.uuid v1.2.0 h1:0uYX9dsZ2yD7q2RtLRtPSdGDWzjeM3TbMJP9utgA0ww=
