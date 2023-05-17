@@ -8,7 +8,7 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/orange-cloudfoundry/gobis v1.23.0
 	github.com/orange-cloudfoundry/gobis-middlewares v1.39.0
-	github.com/sirupsen/logrus v1.9.0
+	github.com/sirupsen/logrus v1.9.1
 	github.com/urfave/cli v1.22.13
 	golang.org/x/crypto v0.7.0
 	gopkg.in/yaml.v2 v2.4.0
