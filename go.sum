@@ -229,8 +229,8 @@ github.com/onsi/gomega v1.5.0/go.mod h1:ex+gbHU/CVuBBDIJjb2X0qEXbFg53c61hWP/1Cpa
 github.com/onsi/gomega v1.27.8 h1:gegWiwZjBsf2DgiSbf5hpokZ98JVDMcWkUiigk6/KXc=
 github.com/orange-cloudfoundry/go-auth-pubtkt v1.2.0 h1:Qpn+ZdHkwmywGeKX2p2sBYpuUUXWApv5IkmAjDFrYIQ=
 github.com/orange-cloudfoundry/go-auth-pubtkt v1.2.0/go.mod h1:0T1Ovf84pyfFAYp25zT9c7vR+81TX1h5m2iIlkvrTB4=
-github.com/orange-cloudfoundry/gobis v1.23.5 h1:4Ukyz3dhueL15jrAmXz3CTgU9R2/KDbi9ZiZAXE8phg=
-github.com/orange-cloudfoundry/gobis v1.23.5/go.mod h1:vlhcZufWmZ9QBKzmVo3yo8Hr0r88Po3iBlUxKjtyINE=
+github.com/orange-cloudfoundry/gobis v1.23.6 h1:ZfuKvRK02bSaDZ6TIzodv7Q3m6WmWVNJII79jURyzqg=
+github.com/orange-cloudfoundry/gobis v1.23.6/go.mod h1:RtHoyOLt3GE3cAEs9grpONfCpVGZWcYnhVRcBv8rfS0=
 github.com/orange-cloudfoundry/gobis-middlewares v1.40.0 h1:9cvZOC0KnS6C7yofpaDzyzp82r8A6p8yJbMxl069nm0=
 github.com/orange-cloudfoundry/gobis-middlewares v1.40.0/go.mod h1:EyvjRyZETrCjs7KHs8gyzLthubOOWL3Zf35OXw5Qo1A=
 github.com/pelletier/go-toml/v2 v2.0.8 h1:0ctb6s9mE31h0/lhu+J6OPmVeDxJn+kYnJc2jZR9tGQ=
