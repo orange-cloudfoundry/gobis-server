@@ -6,8 +6,8 @@ require (
 	github.com/cloudfoundry-community/gautocloud v1.3.1
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/orange-cloudfoundry/gobis v1.23.7
-	github.com/orange-cloudfoundry/gobis-middlewares v1.41.2
+	github.com/orange-cloudfoundry/gobis v1.23.8
+	github.com/orange-cloudfoundry/gobis-middlewares v1.41.4
 	github.com/sirupsen/logrus v1.9.3
 	github.com/urfave/cli v1.22.14
 	golang.org/x/crypto v0.11.0
