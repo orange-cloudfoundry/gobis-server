@@ -8,7 +8,7 @@ import (
 	"github.com/orange-cloudfoundry/gobis-server/server"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 )
 
@@ -60,7 +60,7 @@ func Setup(config *server.GobisServerConfig, appPort int) error {
 
 func loadingRouteConfig() (gobis.ProxyRoute, error) {
 	var route gobis.ProxyRoute
-	b, err := ioutil.ReadFile(filepath.Join(gobisFolder, routeFile))
+	b, err := os.ReadFile(filepath.Join(gobisFolder, routeFile))
 	if err != nil {
 		return route, err
 	}
@@ -83,7 +83,7 @@ func loadingRouteParams() (map[string]interface{}, error) {
 	}
 	var result error
 	for _, f := range files {
-		b, err := ioutil.ReadFile(f)
+		b, err := os.ReadFile(f)
 		if err != nil {
 			result = multierror.Append(result, err)
 			continue

@@ -13,11 +13,10 @@ The standalone server will make available all middlewares you can found in [gobi
   - [In local](#in-local)
   - [In a cloud](#in-a-cloud)
 - [Sidecar](#sidecar)
-  - [Cloud Foundry](#cloud-foundry)
 
 ## Installation
 
-```
+```shell
 go get github/orange-cloudfoundry/gobis-server
 ```
 
@@ -62,64 +61,64 @@ There is two different usage:
 
 1. Create a `config.yml` file where you want to run your server, following this schema:
 
-```yaml
-# Host where server should listen (default to 0.0.0.0) 
-host: 127.0.0.1 # you can either set 0.0.0.0
-# Port where server should listen, if empty it will look for PORT env var and if not found it will be listen on 9080
-port: 8080
-# List of headers which cannot be removed by `sensitive_headers`
-protected_headers: []
-# Set the path where all path from route should start (e.g.: if set to `/root` request for the next route will be localhost/root/app)
-start_path: ""
-routes:
-  # Name of your routes
-- name: myapi
-  # Path which gobis handler should listen to
-  # You can use globs:
-  #   - appending /* will only make requests available in first level of upstream
-  #   - appending /** will pass everything to upstream
-  path: /app/**
-  # Upstream url where all request will be redirected (if ForwardedHeader option not set)
-  # Query parameters can be passed, e.g.: http:#localhost?param=1
-  # User and password are given as basic auth too (this is not recommended to use it), e.g.: http:#user:password@localhost
-  # Can be empty if ForwardedHeader is set
-  # This is ignored if ForwardHandler is set
-  url: http://www.mocky.io/v2/595625d22900008702cd71e8
-  # If set upstream url will be took from the value of this header inside the received request
-  # Url option will be used for the router to match host and path (if not empty) found in value of this header and host and path found in url (If NoUrlMatch is false)
-  # this useful, for example, to create a cloud foundry routes service: https:#docs.cloudfoundry.org/services/route-services.html
-  forwarded_header: ""
-  # List of headers which should not be sent to upstream
-  sensitive_headers: []
-  # List of http methods allowed (Default: all methods are accepted)
-  methods: []
-  # An url to an http proxy to make requests to upstream pass to this
-  http_proxy: ""
-  # An url to an https proxy to make requests to upstream pass to this
-  https_proxy: ""
-  # Force to never use proxy even proxy from environment variables
-  no_proxy: false
-  # By default response from upstream are buffered, it can be issue when sending big files
-  # Set to true to stream response
-  no_buffer: false
-  # Set to true to not send X-Forwarded-* headers to upstream
-  remove_proxy_headers: false
-  # Set to true to not check ssl certificates from upstream (not really recommended)
-  insecure_skip_verify: false
-  # Set to true to see errors on web page when there is a panic error on gobis
-  show_error: false
-  # Chain others routes in a routes
-  routes: ~
-  # Will forward directly to proxified route OPTIONS method without using middlewares
-  options_passthrough: false
-  # It was made to pass arbitrary params to use it after in gobis middlewares
-  # Here you can set cors parameters for cors middleware (see doc relative to middlewares)
-  middleware_params:
-    cors:
-      max_age: 12
-      allowed_origins:
-      - http://localhost
-```
+    ```yaml
+    # Host where server should listen (default to 0.0.0.0) 
+    host: 127.0.0.1 # you can either set 0.0.0.0
+    # Port where server should listen, if empty it will look for PORT env var and if not found it will be listen on 9080
+    port: 8080
+    # List of headers which cannot be removed by `sensitive_headers`
+    protected_headers: []
+    # Set the path where all path from route should start (e.g.: if set to `/root` request for the next route will be localhost/root/app)
+    start_path: ""
+    routes:
+      # Name of your routes
+    - name: myapi
+      # Path which gobis handler should listen to
+      # You can use globs:
+      #   - appending /* will only make requests available in first level of upstream
+      #   - appending /** will pass everything to upstream
+      path: /app/**
+      # Upstream url where all request will be redirected (if ForwardedHeader option not set)
+      # Query parameters can be passed, e.g.: http:#localhost?param=1
+      # User and password are given as basic auth too (this is not recommended to use it), e.g.: http:#user:password@localhost
+      # Can be empty if ForwardedHeader is set
+      # This is ignored if ForwardHandler is set
+      url: http://www.mocky.io/v2/595625d22900008702cd71e8
+      # If set upstream url will be took from the value of this header inside the received request
+      # Url option will be used for the router to match host and path (if not empty) found in value of this header and host and path found in url (If NoUrlMatch is false)
+      # this useful, for example, to create a cloud foundry routes service: https:#docs.cloudfoundry.org/services/route-services.html
+      forwarded_header: ""
+      # List of headers which should not be sent to upstream
+      sensitive_headers: []
+      # List of http methods allowed (Default: all methods are accepted)
+      methods: []
+      # An url to an http proxy to make requests to upstream pass to this
+      http_proxy: ""
+      # An url to an https proxy to make requests to upstream pass to this
+      https_proxy: ""
+      # Force to never use proxy even proxy from environment variables
+      no_proxy: false
+      # By default response from upstream are buffered, it can be issue when sending big files
+      # Set to true to stream response
+      no_buffer: false
+      # Set to true to not send X-Forwarded-* headers to upstream
+      remove_proxy_headers: false
+      # Set to true to not check ssl certificates from upstream (not really recommended)
+      insecure_skip_verify: false
+      # Set to true to see errors on web page when there is a panic error on gobis
+      show_error: false
+      # Chain others routes in a routes
+      routes: ~
+      # Will forward directly to proxified route OPTIONS method without using middlewares
+      options_passthrough: false
+      # It was made to pass arbitrary params to use it after in gobis middlewares
+      # Here you can set cors parameters for cors middleware (see doc relative to middlewares)
+      middleware_params:
+        cors:
+          max_age: 12
+          allowed_origins:
+          - http://localhost
+    ```
 
 2. Run `gobis` in your terminal and server is now started
 
@@ -129,21 +128,21 @@ routes:
   
 #### On CloudFoundry as an a
 
-1. Create a cups service named `.*gobis-config` with the same credentials set in yaml, example:
-```json
-{
-  "protected_headers": ["x-header-one"],
-  "routes": [
+1. Create a CUPS service named `.*gobis-config` with the same credentials set in YAML, example:
+    ```json
     {
-      "name": "app",
-      "path": "/**",
-      "url": "http://www.mocky.io/v2/595625d22900008702cd71e8",
-      "show_error": true,
-      "no_buffer": false
+      "protected_headers": ["x-header-one"],
+      "routes": [
+        {
+          "name": "app",
+          "path": "/**",
+          "url": "http://www.mocky.io/v2/595625d22900008702cd71e8",
+          "show_error": true,
+          "no_buffer": false
+        }
+      ]
     }
-  ]
-}
-```
+    ```
 2. Bind it to your gobis instance
 
 ----
@@ -177,20 +176,20 @@ your app route which will be under gobis (`cf bind-route-service external.domain
 #### On Heroku or Kubernetes
 
 1. Create an env var or service named `.*CONFIG` where you put your configuration in json, example:
-```json
-{
-  "protected_headers": ["x-header-one"],
-  "routes": [
+    ```json
     {
-      "name": "app",
-      "path": "/**",
-      "url": "http://www.mocky.io/v2/595625d22900008702cd71e8",
-      "show_error": true,
-      "no_buffer": false
+      "protected_headers": ["x-header-one"],
+      "routes": [
+        {
+          "name": "app",
+          "path": "/**",
+          "url": "http://www.mocky.io/v2/595625d22900008702cd71e8",
+          "show_error": true,
+          "no_buffer": false
+        }
+      ]
     }
-  ]
-}
-```
+    ```
 2. Your configuration should be loaded
 
 

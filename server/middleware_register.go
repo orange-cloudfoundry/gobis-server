@@ -4,7 +4,7 @@ import (
 	"github.com/orange-cloudfoundry/gobis"
 )
 
-var middlewareHandlers []gobis.MiddlewareHandler = make([]gobis.MiddlewareHandler, 0)
+var middlewareHandlers = make([]gobis.MiddlewareHandler, 0)
 
 func ClearMiddlewareHandlers() {
 	middlewareHandlers = make([]gobis.MiddlewareHandler, 0)
