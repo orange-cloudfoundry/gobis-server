@@ -6,8 +6,8 @@ require (
 	github.com/cloudfoundry-community/gautocloud v1.3.1
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/orange-cloudfoundry/gobis v1.23.8
-	github.com/orange-cloudfoundry/gobis-middlewares v1.43.0
+	github.com/orange-cloudfoundry/gobis v1.24.0
+	github.com/orange-cloudfoundry/gobis-middlewares v1.44.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/urfave/cli v1.22.14
 	golang.org/x/crypto v0.13.0
@@ -34,14 +34,14 @@ require (
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/gorilla/sessions v1.2.1 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
-	github.com/gravitational/trace v1.2.1 // indirect
+	github.com/gravitational/trace v1.3.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jonboulle/clockwork v0.4.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mailgun/multibuf v0.2.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
-	github.com/orange-cloudfoundry/go-auth-pubtkt v1.2.1 // indirect
-	github.com/pelletier/go-toml/v2 v2.0.8 // indirect
+	github.com/orange-cloudfoundry/go-auth-pubtkt v1.3.0 // indirect
+	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
 	github.com/rs/cors v1.10.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect
@@ -50,7 +50,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.16.0 // indirect
-	github.com/subosito/gotenv v1.4.2 // indirect
+	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/thoas/go-funk v0.9.3 // indirect
 	github.com/unrolled/secure v1.13.0 // indirect
 	github.com/vulcand/oxy v1.4.2 // indirect
@@ -60,7 +60,7 @@ require (
 	golang.org/x/sys v0.12.0 // indirect
 	golang.org/x/term v0.12.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
-	google.golang.org/appengine v1.6.7 // indirect
+	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/asn1-ber.v1 v1.0.0-20181015200546-f715ec2f112d // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
