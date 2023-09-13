@@ -126,6 +126,6 @@ func (s GobisServer) getTlsFilePath(tlsConf string) (string, error) {
 		return "", err
 	}
 	defer f.Close()
-	f.WriteString(tlsConf)
-	return f.Name(), nil
+	_, err = f.WriteString(tlsConf)
+	return f.Name(), err
 }
