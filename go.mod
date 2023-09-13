@@ -1,6 +1,6 @@
 module github.com/orange-cloudfoundry/gobis-server
 
-go 1.19
+go 1.21
 
 require (
 	github.com/cloudfoundry-community/gautocloud v1.3.1
