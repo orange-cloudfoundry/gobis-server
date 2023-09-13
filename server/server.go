@@ -7,7 +7,6 @@ import (
 	"github.com/orange-cloudfoundry/gobis"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/acme/autocert"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
@@ -122,7 +121,7 @@ func (s GobisServer) getTlsFilePath(tlsConf string) (string, error) {
 	if !os.IsNotExist(err) {
 		return "", err
 	}
-	f, err := ioutil.TempFile("", "gobis")
+	f, err := os.CreateTemp("", "gobis")
 	if err != nil {
 		return "", err
 	}
