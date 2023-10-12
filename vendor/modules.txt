@@ -122,7 +122,7 @@ github.com/mitchellh/mapstructure
 # github.com/orange-cloudfoundry/go-auth-pubtkt v1.5.0
 ## explicit; go 1.21
 github.com/orange-cloudfoundry/go-auth-pubtkt
-# github.com/orange-cloudfoundry/gobis v1.26.0
+# github.com/orange-cloudfoundry/gobis v1.27.0
 ## explicit; go 1.21
 github.com/orange-cloudfoundry/gobis
 # github.com/orange-cloudfoundry/gobis-middlewares v1.51.0
