@@ -7,7 +7,7 @@ require (
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/orange-cloudfoundry/gobis v1.27.1
-	github.com/orange-cloudfoundry/gobis-middlewares v1.54.0
+	github.com/orange-cloudfoundry/gobis-middlewares v1.54.1
 	github.com/sirupsen/logrus v1.9.3
 	github.com/urfave/cli v1.22.14
 	golang.org/x/crypto v0.14.0
