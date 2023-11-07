@@ -6,7 +6,7 @@ require (
 	github.com/cloudfoundry-community/gautocloud v1.3.1
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/orange-cloudfoundry/gobis v1.28.0
+	github.com/orange-cloudfoundry/gobis v1.28.1
 	github.com/orange-cloudfoundry/gobis-middlewares v1.57.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/urfave/cli v1.22.14
@@ -30,7 +30,7 @@ require (
 	github.com/goji/httpauth v0.0.0-20160601135302-2da839ab0f4d // indirect
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
-	github.com/gorilla/mux v1.8.0 // indirect
+	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/gorilla/sessions v1.2.1 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
