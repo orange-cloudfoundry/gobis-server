@@ -6,8 +6,8 @@ require (
 	github.com/cloudfoundry-community/gautocloud v1.3.2
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/orange-cloudfoundry/gobis v1.30.0
-	github.com/orange-cloudfoundry/gobis-middlewares v1.70.0
+	github.com/orange-cloudfoundry/gobis v1.31.0
+	github.com/orange-cloudfoundry/gobis-middlewares v1.72.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/urfave/cli v1.22.14
 	golang.org/x/crypto v0.21.0
@@ -40,7 +40,7 @@ require (
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mailgun/multibuf v0.2.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
-	github.com/orange-cloudfoundry/go-auth-pubtkt v1.9.0 // indirect
+	github.com/orange-cloudfoundry/go-auth-pubtkt v1.10.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.1.1 // indirect
 	github.com/rs/cors v1.10.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
