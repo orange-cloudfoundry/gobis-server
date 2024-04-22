@@ -122,7 +122,7 @@ github.com/orange-cloudfoundry/go-auth-pubtkt
 # github.com/orange-cloudfoundry/gobis v1.32.0
 ## explicit; go 1.21
 github.com/orange-cloudfoundry/gobis
-# github.com/orange-cloudfoundry/gobis-middlewares v1.73.0
+# github.com/orange-cloudfoundry/gobis-middlewares v1.74.0
 ## explicit; go 1.21
 github.com/orange-cloudfoundry/gobis-middlewares
 github.com/orange-cloudfoundry/gobis-middlewares/authpubtkt
