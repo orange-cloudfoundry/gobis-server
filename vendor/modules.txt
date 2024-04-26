@@ -122,7 +122,7 @@ github.com/orange-cloudfoundry/go-auth-pubtkt
 # github.com/orange-cloudfoundry/gobis v1.33.0
 ## explicit; go 1.21
 github.com/orange-cloudfoundry/gobis
-# github.com/orange-cloudfoundry/gobis-middlewares v1.76.0
+# github.com/orange-cloudfoundry/gobis-middlewares v1.77.0
 ## explicit; go 1.21
 github.com/orange-cloudfoundry/gobis-middlewares
 github.com/orange-cloudfoundry/gobis-middlewares/authpubtkt
@@ -150,9 +150,10 @@ github.com/pelletier/go-toml/v2/internal/characters
 github.com/pelletier/go-toml/v2/internal/danger
 github.com/pelletier/go-toml/v2/internal/tracker
 github.com/pelletier/go-toml/v2/unstable
-# github.com/rs/cors v1.10.1
+# github.com/rs/cors v1.11.0
 ## explicit; go 1.13
 github.com/rs/cors
+github.com/rs/cors/internal
 # github.com/russross/blackfriday/v2 v2.1.0
 ## explicit
 github.com/russross/blackfriday/v2
