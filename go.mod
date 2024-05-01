@@ -7,7 +7,7 @@ require (
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/orange-cloudfoundry/gobis v1.33.0
-	github.com/orange-cloudfoundry/gobis-middlewares v1.77.0
+	github.com/orange-cloudfoundry/gobis-middlewares v1.77.1
 	github.com/sirupsen/logrus v1.9.3
 	github.com/urfave/cli v1.22.15
 	golang.org/x/crypto v0.22.0
@@ -58,7 +58,7 @@ require (
 	github.com/vulcand/predicate v1.2.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc // indirect
-	golang.org/x/net v0.23.0 // indirect
+	golang.org/x/net v0.24.0 // indirect
 	golang.org/x/oauth2 v0.19.0 // indirect
 	golang.org/x/sys v0.19.0 // indirect
 	golang.org/x/term v0.19.0 // indirect
