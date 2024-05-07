@@ -116,13 +116,13 @@ github.com/mailgun/multibuf
 # github.com/mitchellh/mapstructure v1.5.0
 ## explicit; go 1.14
 github.com/mitchellh/mapstructure
-# github.com/orange-cloudfoundry/go-auth-pubtkt v1.12.0
+# github.com/orange-cloudfoundry/go-auth-pubtkt v1.12.1
 ## explicit; go 1.21
 github.com/orange-cloudfoundry/go-auth-pubtkt
-# github.com/orange-cloudfoundry/gobis v1.33.0
+# github.com/orange-cloudfoundry/gobis v1.33.1
 ## explicit; go 1.21
 github.com/orange-cloudfoundry/gobis
-# github.com/orange-cloudfoundry/gobis-middlewares v1.77.1
+# github.com/orange-cloudfoundry/gobis-middlewares v1.78.2
 ## explicit; go 1.21
 github.com/orange-cloudfoundry/gobis-middlewares
 github.com/orange-cloudfoundry/gobis-middlewares/authpubtkt
@@ -255,7 +255,7 @@ golang.org/x/net/context
 golang.org/x/net/idna
 golang.org/x/net/internal/socks
 golang.org/x/net/proxy
-# golang.org/x/oauth2 v0.19.0
+# golang.org/x/oauth2 v0.20.0
 ## explicit; go 1.18
 golang.org/x/oauth2
 golang.org/x/oauth2/clientcredentials
