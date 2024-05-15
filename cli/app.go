@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"errors"
 	"fmt"
 	"github.com/cloudfoundry-community/gautocloud"
 	"github.com/cloudfoundry-community/gautocloud/cloudenv"
@@ -119,7 +120,8 @@ func (a *GobisServerApp) RunServer(c *cli.Context) error {
 				config.LetsEncryptDomains = strings.Split(c.GlobalString("lets-encrypt-domains"), ",")
 			}
 		} else {
-			if _, ok := err.(loader.ErrGiveService); ok {
+			var errGiveService loader.ErrGiveService
+			if errors.As(err, &errGiveService) {
 				return fmt.Errorf("configuration cannot be found")
 			}
 			return err
