@@ -1,33 +1,36 @@
+run:
+  timeout: 5m
+
 linters:
-  disable-all: true
-  enable:
-    - bodyclose
-    - deadcode
-    - depguard
-    - dogsled
-    - dupl
-    - exhaustive
-    - gocritic
-    - goimports
-    - goprintffuncname
-    - gosec
-    - gosimple
-    - govet
-    - ineffassign
-    - nakedret
-    - nolintlint
-    - rowserrcheck
-    - staticcheck
-    - structcheck
-    - stylecheck
-    - typecheck
-    - unconvert
-    - unparam
-    - unused
+  enable-all: true
+  disable:
+    # Deprecated linters
     - varcheck
-    - whitespace
-    - misspell
-    # - goconst
-    # - noctx
-    # - errcheck
-    # - gocyclo
+    - exhaustivestruct
+    - ifshort
+    - structcheck
+    - golint
+    - maligned
+    - interfacer
+    - nosnakecase
+    - deadcode
+    - scopelint
+    - rowserrcheck
+    - sqlclosecheck
+    - structcheck
+    - wastedassign
+    # Ignoring
+    - lll
+    - varnamelen
+    - paralleltest
+    - testpackage
+    - goerr113
+    - exhaustruct
+    - nestif
+    - funlen
+    - goconst
+    - cyclop
+    - gocyclo
+    - gocognit
+    - maintidx
+    - contextcheck
