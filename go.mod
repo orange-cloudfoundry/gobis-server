@@ -1,6 +1,8 @@
 module github.com/orange-cloudfoundry/gobis-server
 
 go 1.22.3
+toolchain go1.22.7
+
 require (
 	github.com/cloudfoundry-community/gautocloud v1.4.1
 	github.com/hashicorp/errwrap v1.1.0 // indirect
@@ -9,7 +11,7 @@ require (
 	github.com/orange-cloudfoundry/gobis-middlewares v1.80.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/urfave/cli v1.22.15
-	golang.org/x/crypto v0.26.0
+	golang.org/x/crypto v0.27.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -58,8 +60,8 @@ require (
 	golang.org/x/exp v0.0.0-20240808152545-0cdaa3abc0fa // indirect
 	golang.org/x/net v0.28.0 // indirect
 	golang.org/x/oauth2 v0.22.0 // indirect
-	golang.org/x/sys v0.24.0 // indirect
-	golang.org/x/text v0.17.0 // indirect
+	golang.org/x/sys v0.25.0 // indirect
+	golang.org/x/text v0.18.0 // indirect
 	gopkg.in/asn1-ber.v1 v1.0.0-20181015200546-f715ec2f112d // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/ldap.v2 v2.5.1 // indirect
