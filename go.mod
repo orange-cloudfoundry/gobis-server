@@ -11,7 +11,7 @@ require (
 	github.com/orange-cloudfoundry/gobis-middlewares v1.80.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/urfave/cli v1.22.16
-	golang.org/x/crypto v0.26.0
+	golang.org/x/crypto v0.32.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -60,8 +60,8 @@ require (
 	golang.org/x/exp v0.0.0-20240808152545-0cdaa3abc0fa // indirect
 	golang.org/x/net v0.28.0 // indirect
 	golang.org/x/oauth2 v0.22.0 // indirect
-	golang.org/x/sys v0.24.0 // indirect
-	golang.org/x/text v0.17.0 // indirect
+	golang.org/x/sys v0.29.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	gopkg.in/asn1-ber.v1 v1.0.0-20181015200546-f715ec2f112d // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/ldap.v2 v2.5.1 // indirect
