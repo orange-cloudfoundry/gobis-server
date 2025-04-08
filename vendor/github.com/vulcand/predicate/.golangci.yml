@@ -1,10 +1,33 @@
-run:
-  deadline: 5m
-  skip-files: []
+linters:
+  enable-all: true
+  disable:
+    - exportloopref # deprecated
+    - sqlclosecheck # not relevant (SQL)
+    - rowserrcheck # not relevant (SQL)
+    - cyclop # duplicate of gocyclo
+    - lll
+    - dupl
+    - wsl
+    - nlreturn
+    - mnd
+    - err113
+    - wrapcheck
+    - exhaustive
+    - exhaustruct
+    - testpackage
+    - tparallel
+    - paralleltest
+    - prealloc
+    - forcetypeassert
+    - varnamelen
+    - nilnil
+    - ireturn
+    - nonamedreturns
 
 linters-settings:
   govet:
-    check-shadowing: true
+    enable:
+      - shadow
   gocyclo:
     min-complexity: 20
   goconst:
@@ -15,39 +38,30 @@ linters-settings:
   funlen:
     lines: -1
     statements: 50
-
-linters:
-  enable-all: true
-  disable:
-    - golint # deprecated
-    - maligned # deprecated
-    - interfacer # deprecated
-    - scopelint # deprecated
-    - sqlclosecheck # not relevant (SQL)
-    - rowserrcheck # not relevant (SQL)
-    - cyclop # duplicate of gocyclo
-    - lll
-    - dupl
-    - wsl
-    - nlreturn
-    - gomnd
-    - goerr113
-    - wrapcheck
-    - exhaustive
-    - exhaustivestruct
-    - testpackage
-    - tparallel
-    - paralleltest
-    - prealloc
-    - ifshort
-    - forcetypeassert
-    - varnamelen
-    - nilnil
-    - ireturn
+  godox:
+    keywords:
+      - FIXME
+  depguard:
+    rules:
+      main:
+        deny:
+          - pkg: "github.com/instana/testify"
+            desc: not allowed
+          - pkg: "github.com/pkg/errors"
+            desc: Should be replaced by standard lib errors package
+  testifylint:
+    disable:
+      - require-error
+      - go-require
+  perfsprint:
+    err-error: true
+    errorf: true
+    sprintf1: true
+    strconcat: false
 
 issues:
   exclude-use-default: false
-  max-per-linter: 0
+  max-issues-per-linter: 0
   max-same-issues: 0
   exclude:
     - "Error return value of .((os\\.)?std(out|err)\\..*|.*Close|.*Flush|os\\.Remove(All)?|.*printf?|os\\.(Un)?Setenv). is not checked"
@@ -57,3 +71,13 @@ issues:
       linters:
         - funlen
         - goconst
+
+output:
+  show-stats: true
+  sort-results: true
+  sort-order:
+    - file
+    - linter
+
+run:
+  timeout: 5m
