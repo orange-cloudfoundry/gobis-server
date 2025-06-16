@@ -1,6 +1,7 @@
 module github.com/orange-cloudfoundry/gobis-server
 
-go 1.22.3
+go 1.22.6
+
 toolchain go1.22.8
 
 require (
@@ -10,7 +11,7 @@ require (
 	github.com/orange-cloudfoundry/gobis v1.35.3
 	github.com/orange-cloudfoundry/gobis-middlewares v1.80.0
 	github.com/sirupsen/logrus v1.9.3
-	github.com/urfave/cli v1.22.16
+	github.com/urfave/cli v1.22.17
 	golang.org/x/crypto v0.26.0
 	gopkg.in/yaml.v2 v2.4.0
 )
@@ -23,7 +24,7 @@ require (
 	github.com/azer/snakecase v1.0.0 // indirect
 	github.com/casbin/casbin v1.9.1 // indirect
 	github.com/cloudfoundry-community/go-cfenv v1.18.0 // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.5 // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.7 // indirect
 	github.com/form3tech-oss/jwt-go v3.2.5+incompatible // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
