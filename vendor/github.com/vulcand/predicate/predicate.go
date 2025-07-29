@@ -21,42 +21,42 @@ various predicates for configuration, e.g. Latency() > 40 || ErrorRate() > 0.5.
 
 Here's an example of fully functional predicate language to deal with division remainders:
 
-    // takes number and returns true or false
-    type numberPredicate func(v int) bool
+	    // takes number and returns true or false
+	    type numberPredicate func(v int) bool
 
-    // Converts one number to another
-    type numberMapper func(v int) int
+	    // Converts one number to another
+	    type numberMapper func(v int) int
 
-    // Function that creates predicate to test if the remainder is 0
-    func divisibleBy(divisor int) numberPredicate {
-	    return func(v int) bool {
-		    return v%divisor == 0
-        }
-    }
+	    // Function that creates predicate to test if the remainder is 0
+	    func divisibleBy(divisor int) numberPredicate {
+		    return func(v int) bool {
+			    return v%divisor == 0
+	        }
+	    }
 
-    // Function - logical operator AND that combines predicates
-    func numberAND(a, b numberPredicate) numberPredicate {
-        return func(v int) bool {
-            return a(v) && b(v)
-        }
-    }
+	    // Function - logical operator AND that combines predicates
+	    func numberAND(a, b numberPredicate) numberPredicate {
+	        return func(v int) bool {
+	            return a(v) && b(v)
+	        }
+	    }
 
-    p, err := NewParser(Def{
-		Operators: Operators{
-			AND: numberAND,
-		},
-		Functions: map[string]interface{}{
-			"DivisibleBy": divisibleBy,
-		},
-	})
+	    p, err := NewParser(Def{
+			Operators: Operators{
+				AND: numberAND,
+			},
+			Functions: map[string]interface{}{
+				"DivisibleBy": divisibleBy,
+			},
+		})
 
-	pr, err := p.Parse("DivisibleBy(2) && DivisibleBy(3)")
-    if err == nil {
-        fmt.Fatalf("Error: %v", err)
-    }
-    pr.(numberPredicate)(2) // false
-    pr.(numberPredicate)(3) // false
-    pr.(numberPredicate)(6) // true
+		pr, err := p.Parse("DivisibleBy(2) && DivisibleBy(3)")
+	    if err == nil {
+	        fmt.Fatalf("Error: %v", err)
+	    }
+	    pr.(numberPredicate)(2) // false
+	    pr.(numberPredicate)(3) // false
+	    pr.(numberPredicate)(6) // true
 */
 package predicate
 
@@ -65,8 +65,7 @@ type Def struct {
 	Operators Operators
 	// Function matching is case sensitive, e.g. Len is different from len
 	Functions map[string]interface{}
-	// GetIdentifier returns value of any identifier passed in
-	// in the form []string{"id", "field", "subfield"}
+	// GetIdentifier returns value of any identifier passed in the form []string{"id", "field", "subfield"}
 	GetIdentifier GetIdentifierFn
 	// GetProperty returns property from a map
 	GetProperty GetPropertyFn
@@ -98,5 +97,5 @@ type Operators struct {
 
 // Parser takes the string with expression and calls the operators and functions.
 type Parser interface {
-	Parse(string) (interface{}, error)
+	Parse(in string) (interface{}, error)
 }
